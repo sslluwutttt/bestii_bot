@@ -258,9 +258,11 @@ async function handleSendInteraction(ctx) {
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
   if (connections.length === 0) return ctx.reply("no connections yet.");
-  const keyboard = connections.map((c) => [
-    { text: `@${displayName}`, callback_data: `conn:${c.user_id}` },
-  ]);
+  const keyboard = await Promise.all(
+    connections.map(async (c) => [
+      { text: `@${(await db.getDisplayName(c.user_id)) || c.username || c.user_id}`, callback_data: `conn:${c.user_id}` },
+    ])
+  );
   userStates[userId] = { step: "select_connection" };
   await ctx.reply("сhoose a connection:", {
     reply_markup: { inline_keyboard: keyboard },
