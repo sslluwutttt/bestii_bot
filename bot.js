@@ -1,7 +1,7 @@
 const { Telegraf } = require("telegraf");
 const db = require("./db");
 
-const bot = new Telegraf("7547119621:AAGPRCP_8a5KOfYCjtiexTNnnjrPfQwywZs");
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 db.initDatabase();
 
