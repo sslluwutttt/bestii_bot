@@ -210,7 +210,10 @@ async function handleBackToCategories(ctx) {
 async function handleMoodSelection(ctx, mood) {
   await db.setMood(ctx.from.id, mood);
   await ctx.editMessageText(`your mood is now ${mood}!`);
-  const displayName = (await db.getDisplayName(ctx.from.id)) || ctx.from.username || ctx.from.first_name;
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
   const connections = await db.getConnections(ctx.from.id);
   for (const conn of connections) {
     if (conn.user_id !== ctx.from.id) {
@@ -242,8 +245,8 @@ async function handleSendInteraction(ctx) {
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
   if (connections.length === 0) return ctx.reply("тo connections yet.");
-  const keyboard = connections.map((c) => [
-    { text: `@${c.username}`, callback_data: `conn:${c.user_id}` },
+  const keyboard = Object.keys(EXPRESSIONS).map((e) => [
+    { text: `${EXPRESSIONS[e].emoji} ${e}`, callback_data: `exp:${e}` },
   ]);
   userStates[userId] = { step: "select_connection" };
   await ctx.reply("сhoose a connection:", {
@@ -271,9 +274,7 @@ async function handleMyConnections(ctx) {
 
 async function handleSetNamePrompt(ctx, targetUserId) {
   userStates[ctx.from.id] = { step: "set_name", targetUserId };
-  await ctx.editMessageText(
-    "send me a new name for this user (max 32 chars):"
-  );
+  await ctx.editMessageText("send me a new name for this user (max 32 chars):");
 }
 
 async function handleEditRelationship(ctx, targetUserId) {
@@ -416,10 +417,15 @@ bot.command("connect", async (ctx) => {
   }
 
   const requestId = await db.addPendingConnection(userId, target.user_id, type);
-  const displayName = (await db.getDisplayName(ctx.from.id)) || ctx.from.username || ctx.from.first_name;
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
   await bot.telegram.sendMessage(
     target.user_id,
-    `@${displayName || ctx.from.username} wants to connect as a ${type}. accept?`,
+    `@${
+      displayName || ctx.from.username
+    } wants to connect as a ${type}. accept?`,
     {
       reply_markup: {
         inline_keyboard: [
@@ -564,11 +570,11 @@ bot.on("callback_query", async (ctx) => {
     await db.sendExpression(userId, receiverId, expression);
     const receiver = await db.getUser(receiverId);
     await ctx.editMessageText(
-      `you sent a ${expression} ${EXPRESSIONS[expression]} to @${receiver.username}!`
+      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to @${receiver.username}!`
     );
     await bot.telegram.sendMessage(
       receiverId,
-      `@${ctx.from.username} sent you a ${expression} ${EXPRESSIONS[expression]}!`
+      `@${ctx.from.username} sent you a ${EXPRESSIONS[expression].emoji} ${EXPRESSIONS[expression].message}`
     );
     delete userStates[userId];
   } else if (data.startsWith("mood:")) {
