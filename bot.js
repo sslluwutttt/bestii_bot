@@ -88,7 +88,7 @@ const MOODS = {
     "😩 weary",
     "🐌 sluggish",
     "💤 lethargic",
-    "🔥 burnt_out",
+    "🔥 burnt out",
     "😑 fatigued",
     "😵‍💫 drowsy",
   ],
