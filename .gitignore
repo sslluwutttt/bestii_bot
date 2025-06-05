@@ -1,0 +1,6 @@
+node_modules/
+.env
+*.log
+bestiibot.db
+bestiibot.db-journal
+.DS_Store

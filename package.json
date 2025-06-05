@@ -1,0 +1,29 @@
+{
+  "name": "bestii-bot",
+  "version": "1.0.0",
+  "description": "A Telegram bot for connecting people and sharing love expressions with mood tracking",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "love",
+    "mood",
+    "friends",
+    "emotions",
+    "notifications"
+  ],
+  "author": "mattbratt",
+  "license": "MIT",
+  "dependencies": {
+    "mysql2": "^3.14.1",
+    "telegraf": "^4.16.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
