@@ -245,8 +245,8 @@ async function handleSendInteraction(ctx) {
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
   if (connections.length === 0) return ctx.reply("тo connections yet.");
-  const keyboard = Object.keys(EXPRESSIONS).map((e) => [
-    { text: `${EXPRESSIONS[e].emoji} ${e}`, callback_data: `exp:${e}` },
+  const keyboard = connections.map((c) => [
+    { text: `@${c.username}`, callback_data: `conn:${c.user_id}` },
   ]);
   userStates[userId] = { step: "select_connection" };
   await ctx.reply("сhoose a connection:", {
@@ -556,7 +556,7 @@ bot.on("callback_query", async (ctx) => {
     const selectedUserId = data.split(":")[1];
     userStates[userId] = { step: "select_expression", selectedUserId };
     const keyboard = Object.keys(EXPRESSIONS).map((e) => [
-      { text: `${e} ${EXPRESSIONS[e]}`, callback_data: `exp:${e}` },
+      { text: `${EXPRESSIONS[e].emoji} ${e}`, callback_data: `exp:${e}` },
     ]);
     await ctx.editMessageText("choose an expression:", {
       reply_markup: { inline_keyboard: keyboard },
