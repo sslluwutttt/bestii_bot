@@ -251,11 +251,15 @@ async function handleFriendsMoods(ctx) {
 }
 
 async function handleSendInteraction(ctx) {
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
   if (connections.length === 0) return ctx.reply("no connections yet.");
   const keyboard = connections.map((c) => [
-    { text: `@${c.username}`, callback_data: `conn:${c.user_id}` },
+    { text: `@${displayName}`, callback_data: `conn:${c.user_id}` },
   ]);
   userStates[userId] = { step: "select_connection" };
   await ctx.reply("сhoose a connection:", {
@@ -264,15 +268,19 @@ async function handleSendInteraction(ctx) {
 }
 
 async function handleMyConnections(ctx) {
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
   const connections = await db.getConnections(ctx.from.id);
   if (connections.length === 0) return ctx.reply("no connections yet.");
   const keyboard = connections.map((c) => [
     {
-      text: `👤 ${c.display_name || c.username} (${c.relationship_type})`,
+      text: `👤 ${displayName} (${c.relationship_type})`,
       callback_data: `editrel:${c.user_id}`,
     },
     {
-      text: `✏️ set name for ${c.display_name || c.username}`,
+      text: `✏️ set name for ${displayName}`,
       callback_data: `setname:${c.user_id}`,
     },
   ]);
@@ -288,6 +296,10 @@ async function handleSetNamePrompt(ctx, targetUserId) {
 
 async function handleEditRelationship(ctx, targetUserId) {
   const types = ["partner", "friend", "bestie"];
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
 
   const connection = (await db.getConnections(ctx.from.id)).find(
     (c) => c.user_id == targetUserId
@@ -303,7 +315,7 @@ async function handleEditRelationship(ctx, targetUserId) {
     ]);
   keyboard.push([{ text: "⬅️ Back", callback_data: "connections:back" }]);
   await ctx.editMessageText(
-    `@${connection.username}\ncurrent: ${connection.relationship_type}\nchoose new type:`,
+    `@${displayName}\ncurrent: ${connection.relationship_type}\nchoose new type:`,
     { reply_markup: { inline_keyboard: keyboard } }
   );
 }
@@ -313,8 +325,12 @@ async function handleSetRelationship(ctx, targetUserId, newType) {
   const connection = (await db.getConnections(ctx.from.id)).find(
     (c) => c.user_id == targetUserId
   );
+  const displayName =
+    (await db.getDisplayName(ctx.from.id)) ||
+    ctx.from.username ||
+    ctx.from.first_name;
   await ctx.editMessageText(
-    `@${connection.username}\nrelationship type updated to: ${newType}`
+    `@${displayName}\nrelationship type updated to: ${newType}`
   );
 }
 
@@ -574,6 +590,10 @@ bot.on("callback_query", async (ctx) => {
     userStates[userId]?.step === "select_expression" &&
     data.startsWith("exp:")
   ) {
+    const displayName =
+      (await db.getDisplayName(ctx.from.id)) ||
+      ctx.from.username ||
+      ctx.from.first_name;
     const expression = data.split(":")[1];
     const receiverId = userStates[userId].selectedUserId;
     await db.sendExpression(userId, receiverId, expression);
@@ -583,7 +603,7 @@ bot.on("callback_query", async (ctx) => {
     );
     await bot.telegram.sendMessage(
       receiverId,
-      `@${ctx.from.username} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
+      `@${displayName} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
     );
     delete userStates[userId];
   } else if (data.startsWith("mood:")) {

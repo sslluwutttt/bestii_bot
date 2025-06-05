@@ -11,7 +11,7 @@ const pool = mysql.createPool({
 async function initDatabase() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS Users (
-      user_id INT PRIMARY KEY,
+      user_id BIGINT PRIMARY KEY,
       username VARCHAR(255),
       display_name VARCHAR(255),
       mood VARCHAR(50) DEFAULT 'happy'
@@ -20,24 +20,24 @@ async function initDatabase() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS Connections (
       connection_id INT AUTO_INCREMENT PRIMARY KEY,
-      user1_id INT,
-      user2_id INT,
+      user1_id BIGINT,
+      user2_id BIGINT,
       relationship_type VARCHAR(50)
     )
   `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS PendingConnections (
       request_id INT AUTO_INCREMENT PRIMARY KEY,
-      requester_id INT,
-      target_id INT,
+      requester_id BIGINT,
+      target_id BIGINT,
       relationship_type VARCHAR(50)
     )
   `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS LoveExpressions (
       expression_id INT AUTO_INCREMENT PRIMARY KEY,
-      sender_id INT,
-      receiver_id INT,
+      sender_id BIGINT,
+      receiver_id BIGINT,
       expression_type VARCHAR(50),
       timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
