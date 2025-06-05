@@ -416,6 +416,7 @@ bot.command("connect", async (ctx) => {
   }
 
   const requestId = await db.addPendingConnection(userId, target.user_id, type);
+  const displayName = (await db.getDisplayName(ctx.from.id)) || ctx.from.username || ctx.from.first_name;
   await bot.telegram.sendMessage(
     target.user_id,
     `@${displayName || ctx.from.username} wants to connect as a ${type}. accept?`,
