@@ -159,26 +159,38 @@ const EXPRESSIONS = {
   kiss: { emoji: "😘", message: "blew you a kiss!" },
   heart: { emoji: "❤️", message: "sent you love!" },
   cuddle: { emoji: "🫂", message: "wants to cuddle with you!" },
-  flower: { emoji: "🌹", message: "gave you a beautiful flower!" },
-  chocolate: { emoji: "🍫", message: "shared chocolate with you!" },
   smile: { emoji: "😊", message: "smiled at you!" },
   wink: { emoji: "😉", message: "winked at you!" },
   high_five: { emoji: "🙏", message: "gave you a high five!" },
   thumbs_up: { emoji: "👍", message: "gave you thumbs up!" },
   clap: { emoji: "👏", message: "is clapping for you!" },
-  sparkles: { emoji: "✨", message: "sent you sparkles!" },
   rainbow: { emoji: "🌈", message: "shared a rainbow with you!" },
-  star: { emoji: "⭐", message: "thinks you're a star!" },
-  gem: { emoji: "💎", message: "thinks you're a gem!" },
-  gift: { emoji: "🎁", message: "gave you a gift!" },
   handshake: { emoji: "🤝", message: "shook your hand!" },
   wave: { emoji: "👋", message: "waved at you!" },
-  party: { emoji: "🥳", message: "invited you to a party!" },
-  sun: { emoji: "🌞", message: "wished you a sunny day!" },
+  loud: { emoji: "🥁", message: "wants you to wake up!" },
+  sun: { emoji: "🌞", message: "wished you a good morning!" },
   moon: { emoji: "🌙", message: "wished you sweet dreams!" },
   umbrella: { emoji: "☂️", message: "offered you an umbrella!" },
+  fan: { emoji: "🪭", message: "offered you a fan!" },
   shield: { emoji: "🛡️", message: "is protecting you!" },
   pat: { emoji: "🐾", message: "pat you!" },
+  poop: { emoji: "💩", message: "threw poop at you!" },
+  slap: { emoji: "🖐️", message: "slapped you!" },
+  ignore: { emoji: "🙈", message: "is ignoring you." },
+  facepalm: { emoji: "🤦", message: "is disappointed in you." },
+  eye_roll: { emoji: "🙄", message: "rolled their eyes at you." },
+  fist: { emoji: "👊", message: "raised a fist at you!" },
+  hmph: { emoji: "😒", message: "said 'hmph!' and turned away!" },
+  salt: { emoji: "🧂", message: "threw salt at you!" },
+  pout: { emoji: "😠", message: "is pouting because of you!" },
+  sigh: { emoji: "😔", message: "sighed deeply at you!" },
+  cry: { emoji: "😢", message: "is crying because of you!" },
+  blush: { emoji: "😊", message: "blushed because of you!" },
+  sleep: { emoji: "😴", message: "fell asleep on you!" },
+  hungry: { emoji: "🤤", message: "is drooling with hunger!" },
+  dance: { emoji: "💃", message: "is dancing with you!" },
+  microphone: { emoji: "🎤", message: "sang to you!" },
+  cheer: { emoji: "🎉", message: "is cheering for you!" },
 };
 
 const userStates = {};
@@ -260,7 +272,12 @@ async function handleSendInteraction(ctx) {
   if (connections.length === 0) return ctx.reply("no connections yet.");
   const keyboard = await Promise.all(
     connections.map(async (c) => [
-      { text: `@${(await db.getDisplayName(c.user_id)) || c.username || c.user_id}`, callback_data: `conn:${c.user_id}` },
+      {
+        text: `${
+          (await db.getDisplayName(c.user_id)) || c.username || c.user_id
+        }`,
+        callback_data: `conn:${c.user_id}`,
+      },
     ])
   );
   userStates[userId] = { step: "select_connection" };
