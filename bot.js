@@ -243,17 +243,17 @@ async function handleMyMood(ctx) {
 
 async function handleFriendsMoods(ctx) {
   const connections = await db.getConnections(ctx.from.id);
-  if (connections.length === 0) return ctx.reply("тo connections yet.");
+  if (connections.length === 0) return ctx.reply("no connections yet.");
   const list = connections
     .map((c) => `@${c.username} - ${c.mood || "not set"}`)
     .join("\n");
-  await ctx.reply(`сonnections' moods:\n${list}`);
+  await ctx.reply(`connections' moods:\n${list}`);
 }
 
 async function handleSendInteraction(ctx) {
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
-  if (connections.length === 0) return ctx.reply("тo connections yet.");
+  if (connections.length === 0) return ctx.reply("no connections yet.");
   const keyboard = connections.map((c) => [
     { text: `@${c.username}`, callback_data: `conn:${c.user_id}` },
   ]);
