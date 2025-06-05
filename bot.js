@@ -170,6 +170,15 @@ const EXPRESSIONS = {
   rainbow: { emoji: "🌈", message: "shared a rainbow with you!" },
   star: { emoji: "⭐", message: "thinks you're a star!" },
   gem: { emoji: "💎", message: "thinks you're a gem!" },
+  gift: { emoji: "🎁", message: "gave you a gift!" },
+  handshake: { emoji: "🤝", message: "shook your hand!" },
+  wave: { emoji: "👋", message: "waved at you!" },
+  party: { emoji: "🥳", message: "invited you to a party!" },
+  sun: { emoji: "🌞", message: "wished you a sunny day!" },
+  moon: { emoji: "🌙", message: "wished you sweet dreams!" },
+  umbrella: { emoji: "☂️", message: "offered you an umbrella!" },
+  shield: { emoji: "🛡️", message: "is protecting you!" },
+  pat: { emoji: "🐾", message: "pat you!" },
 };
 
 const userStates = {};
@@ -574,7 +583,7 @@ bot.on("callback_query", async (ctx) => {
     );
     await bot.telegram.sendMessage(
       receiverId,
-      `@${ctx.from.username} sent you a ${EXPRESSIONS[expression].emoji} ${EXPRESSIONS[expression].message}`
+      `@${ctx.from.username} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
     );
     delete userStates[userId];
   } else if (data.startsWith("mood:")) {
