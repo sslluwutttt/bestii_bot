@@ -1,218 +1,197 @@
-const mysql = require("mysql2/promise");
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
-const pool = mysql.createPool({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  database: process.env.MYSQLDATABASE,
-  password: process.env.MYSQLPASSWORD,
-  port: process.env.MYSQLPORT,
-});
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 async function initDatabase() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS Users (
-      user_id BIGINT PRIMARY KEY,
-      username VARCHAR(255),
-      display_name VARCHAR(255),
-      mood VARCHAR(50) DEFAULT 'happy'
-    )
-  `);
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS Connections (
-      connection_id INT AUTO_INCREMENT PRIMARY KEY,
-      user1_id BIGINT,
-      user2_id BIGINT,
-      relationship_type VARCHAR(50)
-    )
-  `);
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS PendingConnections (
-      request_id INT AUTO_INCREMENT PRIMARY KEY,
-      requester_id BIGINT,
-      target_id BIGINT,
-      relationship_type VARCHAR(50)
-    )
-  `);
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS LoveExpressions (
-      expression_id INT AUTO_INCREMENT PRIMARY KEY,
-      sender_id BIGINT,
-      receiver_id BIGINT,
-      expression_type VARCHAR(50),
-      timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+  // Supabase (Postgres) не поддерживает создание таблиц через JS SDK.
+  // Таблицы должны быть созданы вручную через SQL миграции или Supabase Studio.
+  // Здесь просто заглушка для совместимости.
+  return;
 }
 
 async function registerUser(userId, username) {
-  await pool.query(
-    `
-    INSERT INTO Users (user_id, username, display_name)
-    VALUES (?, ?, ?)
-    ON DUPLICATE KEY UPDATE username = ?
-  `,
-    [userId, username, username, username]
-  );
+  await supabase
+    .from('Users')
+    .upsert([
+      {
+        user_id: userId,
+        username,
+        display_name: username,
+      },
+    ], { onConflict: ['user_id'] });
 }
 
 async function getUser(userId) {
-  const [rows] = await pool.query("SELECT * FROM Users WHERE user_id = ?", [
-    userId,
-  ]);
-  return rows[0];
+  const { data } = await supabase
+    .from('Users')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+  return data;
 }
 
 async function getUserByUsername(username) {
-  const [rows] = await pool.query("SELECT * FROM Users WHERE username = ?", [
-    username,
-  ]);
-  return rows[0];
+  const { data } = await supabase
+    .from('Users')
+    .select('*')
+    .eq('username', username)
+    .single();
+  return data;
 }
 
 async function setMood(userId, mood) {
-  await pool.query("UPDATE Users SET mood = ? WHERE user_id = ?", [
-    mood,
-    userId,
-  ]);
+  await supabase
+    .from('Users')
+    .update({ mood })
+    .eq('user_id', userId);
 }
 
 async function getMood(userId) {
-  const [rows] = await pool.query("SELECT mood FROM Users WHERE user_id = ?", [
-    userId,
-  ]);
-  return rows[0]?.mood;
+  const { data } = await supabase
+    .from('Users')
+    .select('mood')
+    .eq('user_id', userId)
+    .single();
+  return data?.mood;
 }
 
 async function addPendingConnection(requesterId, targetId, relationshipType) {
-  const [result] = await pool.query(
-    `
-    INSERT INTO PendingConnections (requester_id, target_id, relationship_type)
-    VALUES (?, ?, ?)
-  `,
-    [requesterId, targetId, relationshipType]
-  );
-  return result.insertId;
+  const { data, error } = await supabase
+    .from('PendingConnections')
+    .insert([
+      {
+        requester_id: requesterId,
+        target_id: targetId,
+        relationship_type: relationshipType,
+      },
+    ])
+    .select('request_id')
+    .single();
+  if (error) throw error;
+  return data.request_id;
 }
 
 async function getPendingConnectionsForUser(userId) {
-  const [rows] = await pool.query(
-    `
-    SELECT p.*, u.username AS requester_username
-    FROM PendingConnections p
-    JOIN Users u ON p.requester_id = u.user_id
-    WHERE p.target_id = ?
-  `,
-    [userId]
-  );
-  return rows;
+  const { data } = await supabase
+    .from('PendingConnections')
+    .select('*, Users!PendingConnections_requester_id_fkey(username)')
+    .eq('target_id', userId);
+  return (data || []).map(row => ({
+    ...row,
+    requester_username: row.Users?.username,
+  }));
 }
 
 async function getSentPendingConnections(userId) {
-  const [rows] = await pool.query(
-    `
-    SELECT p.*, u.username AS target_username
-    FROM PendingConnections p
-    JOIN Users u ON p.target_id = u.user_id
-    WHERE p.requester_id = ?
-  `,
-    [userId]
-  );
-  return rows;
+  const { data } = await supabase
+    .from('PendingConnections')
+    .select('*, Users!PendingConnections_target_id_fkey(username)')
+    .eq('requester_id', userId);
+  return (data || []).map(row => ({
+    ...row,
+    target_username: row.Users?.username,
+  }));
 }
 
 async function acceptConnection(requestId) {
-  const [rows] = await pool.query(
-    "SELECT * FROM PendingConnections WHERE request_id = ?",
-    [requestId]
-  );
-  const row = rows[0];
-  if (!row) throw new Error("Request not found");
-  await pool.query(
-    `
-    INSERT INTO Connections (user1_id, user2_id, relationship_type)
-    VALUES (?, ?, ?)
-  `,
-    [row.requester_id, row.target_id, row.relationship_type]
-  );
-  await pool.query("DELETE FROM PendingConnections WHERE request_id = ?", [
-    requestId,
-  ]);
+  const { data: row } = await supabase
+    .from('PendingConnections')
+    .select('*')
+    .eq('request_id', requestId)
+    .single();
+  if (!row) throw new Error('Request not found');
+  await supabase
+    .from('Connections')
+    .insert([
+      {
+        user1_id: row.requester_id,
+        user2_id: row.target_id,
+        relationship_type: row.relationship_type,
+      },
+    ]);
+  await supabase
+    .from('PendingConnections')
+    .delete()
+    .eq('request_id', requestId);
   return row;
 }
 
 async function declineConnection(requestId) {
-  await pool.query("DELETE FROM PendingConnections WHERE request_id = ?", [
-    requestId,
-  ]);
+  await supabase
+    .from('PendingConnections')
+    .delete()
+    .eq('request_id', requestId);
 }
 
 async function getConnections(userId) {
-  const [rows] = await pool.query(
-    `
-    SELECT c.connection_id, c.relationship_type,
-           CASE WHEN c.user1_id = ? THEN c.user2_id ELSE c.user1_id END AS connected_user_id,
-           u.username AS connected_username,
-           u.display_name AS connected_display_name,
-           u.mood AS connected_mood
-    FROM Connections c
-    JOIN Users u ON u.user_id = CASE WHEN c.user1_id = ? THEN c.user2_id ELSE c.user1_id END
-    WHERE c.user1_id = ? OR c.user2_id = ?
-  `,
-    [userId, userId, userId, userId]
-  );
-  return rows.map((row) => ({
-    user_id: row.connected_user_id,
-    username: row.connected_username,
-    display_name: row.connected_display_name,
-    mood: row.connected_mood,
-    relationship_type: row.relationship_type,
-  }));
+  const { data } = await supabase
+    .from('Connections')
+    .select(`
+      connection_id,
+      relationship_type,
+      user1_id,
+      user2_id,
+      Users1:Users!Connections_user1_id_fkey(username, display_name, mood, user_id),
+      Users2:Users!Connections_user2_id_fkey(username, display_name, mood, user_id)
+    `)
+    .or(`user1_id.eq.${userId},user2_id.eq.${userId}`);
+  return (data || []).map(row => {
+    const isUser1 = row.user1_id === userId;
+    const connected = isUser1 ? row.Users2 : row.Users1;
+    return {
+      user_id: connected?.user_id,
+      username: connected?.username,
+      display_name: connected?.display_name,
+      mood: connected?.mood,
+      relationship_type: row.relationship_type,
+    };
+  });
 }
 
 async function disconnect(user1Id, user2Id) {
-  await pool.query(
-    `
-    DELETE FROM Connections
-    WHERE (user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)
-  `,
-    [user1Id, user2Id, user2Id, user1Id]
-  );
+  await supabase
+    .from('Connections')
+    .delete()
+    .or(`and(user1_id.eq.${user1Id},user2_id.eq.${user2Id}),and(user1_id.eq.${user2Id},user2_id.eq.${user1Id})`);
 }
 
 async function sendExpression(senderId, receiverId, expressionType) {
-  await pool.query(
-    `
-    INSERT INTO LoveExpressions (sender_id, receiver_id, expression_type)
-    VALUES (?, ?, ?)
-  `,
-    [senderId, receiverId, expressionType]
-  );
+  await supabase
+    .from('LoveExpressions')
+    .insert([
+      {
+        sender_id: senderId,
+        receiver_id: receiverId,
+        expression_type: expressionType,
+      },
+    ]);
 }
 
 async function updateRelationshipType(userId, targetUserId, newType) {
-  await pool.query(
-    `
-    UPDATE Connections
-    SET relationship_type = ?
-    WHERE (user1_id = ? AND user2_id = ?)
-       OR (user1_id = ? AND user2_id = ?)
-    `,
-    [newType, userId, targetUserId, targetUserId, userId]
-  );
+  await supabase
+    .from('Connections')
+    .update({ relationship_type: newType })
+    .or(`and(user1_id.eq.${userId},user2_id.eq.${targetUserId}),and(user1_id.eq.${targetUserId},user2_id.eq.${userId})`);
 }
 
 async function setDisplayName(userId, displayName) {
-  await pool.query(
-    `UPDATE Users SET display_name = ? WHERE user_id = ?`,
-    [displayName, userId]
-  );
+  await supabase
+    .from('Users')
+    .update({ display_name: displayName })
+    .eq('user_id', userId);
 }
+
 async function getDisplayName(userId) {
-  const [rows] = await pool.query(
-    `SELECT display_name FROM Users WHERE user_id = ?`,
-    [userId]
-  );
-  return rows[0]?.display_name || null;
+  const { data } = await supabase
+    .from('Users')
+    .select('display_name')
+    .eq('user_id', userId)
+    .single();
+  return data?.display_name || null;
 }
 
 module.exports = {
