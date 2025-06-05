@@ -268,19 +268,15 @@ async function handleSendInteraction(ctx) {
 }
 
 async function handleMyConnections(ctx) {
-  const displayName =
-    (await db.getDisplayName(ctx.from.id)) ||
-    ctx.from.username ||
-    ctx.from.first_name;
   const connections = await db.getConnections(ctx.from.id);
   if (connections.length === 0) return ctx.reply("no connections yet.");
   const keyboard = connections.map((c) => [
     {
-      text: `👤 ${displayName} (${c.relationship_type})`,
+      text: `👤 ${c.username} (${c.relationship_type})`,
       callback_data: `editrel:${c.user_id}`,
     },
     {
-      text: `✏️ set name for ${displayName}`,
+      text: `✏️ set name for ${c.username}`,
       callback_data: `setname:${c.user_id}`,
     },
   ]);
