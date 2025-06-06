@@ -26,11 +26,12 @@ const MOODS = {
     "🤩 excited",
     "🥳 ecstatic",
     "😁 cheerful",
-    "😸 delighted",
     "🤗 elated",
     "🌟 euphoric",
-    "😇 blissful",
-    "✨ radiant",
+    "🌱 optimistic",
+    "🌈 positive",
+    "🦋 inspired",
+    "🌟 encouraged",
   ],
   love: [
     "😍 in love",
@@ -40,7 +41,6 @@ const MOODS = {
     "😘 adoring",
     "💝 smitten",
     "❤️‍🔥 passionate",
-    "💗 devoted",
     "🤱 tender",
     "🫶 caring",
   ],
@@ -75,22 +75,21 @@ const MOODS = {
     "😵‍💫 stressed",
     "🥺 panicked",
     "😵 overwhelmed",
-    "😬 restless",
-    "😬 uneasy",
-    "😰 tense",
-    "🤯 frantic",
+    "📊 overthinking",
   ],
   tired: [
     "😴 tired",
     "🥱 exhausted",
     "😪 sleepy",
     "🫠 drained",
-    "😩 weary",
-    "🐌 sluggish",
-    "💤 lethargic",
     "🔥 burnt out",
-    "😑 fatigued",
-    "😵‍💫 drowsy",
+    "🛏️ need bed",
+    "💤 sleepless",
+    "🥱 yawning",
+    "😮‍💨 exhausted",
+    "🧟 zombie mode",
+    "📉 no energy",
+    "🌙 night owl",
   ],
   surprised: [
     "😲 surprised",
@@ -98,23 +97,18 @@ const MOODS = {
     "🤯 amazed",
     "😕 confused",
     "🤔 puzzled",
-    "😵 bewildered",
     "😳 stunned",
-    "🫨 dumbfounded",
     "🤷 perplexed",
     "🧐 curious",
+    "😰 freaking out",
   ],
   calm: [
     "😌 calm",
     "☮️ peaceful",
     "🕊️ serene",
-    "🧘 tranquil",
     "😎 relaxed",
-    "🧘‍♀️ zen",
     "😊 content",
     "😌 satisfied",
-    "🌙 mellow",
-    "🙂 composed",
   ],
   playful: [
     "😜 playful",
@@ -132,8 +126,6 @@ const MOODS = {
     "😎 confident",
     "🦚 proud",
     "💪 determined",
-    "🎯 ambitious",
-    "🔥 fierce",
     "🦁 bold",
     "🦸 brave",
     "💎 strong",
@@ -145,12 +137,12 @@ const MOODS = {
     "🙂 okay",
     "👍 fine",
     "😑 bored",
-    "🤷‍♀️ indifferent",
     "🤔 thoughtful",
     "💭 contemplative",
     "☁️ dreamy",
-    "🌅 nostalgic",
     "🌟 hopeful",
+    "🎯 focused",
+    "💻 productive",
   ],
 };
 
@@ -216,7 +208,21 @@ const EXPRESSIONS = {
     message: "said 'hmph!' and turned away!",
     label: "hmph!",
   },
-  pout: { emoji: "😠", message: "is pouting because of you!", label: "pout" },
+  hiss: {
+    emoji: "😾",
+    message: "hissed at you like an angry cat!",
+    label: "hiss",
+  },
+  silent: {
+    emoji: "🤐",
+    message: "is giving you the silent treatment.",
+    label: "silent treatment",
+  },
+  tantrum: {
+    emoji: "😤",
+    message: "is throwing a tantrum!",
+    label: "throw tantrum",
+  },
   sigh: { emoji: "😔", message: "sighed deeply at you!", label: "sigh" },
   cry: { emoji: "😢", message: "is crying because of you!", label: "cry" },
   blush: { emoji: "😊", message: "blushed because of you!", label: "blush" },
@@ -225,6 +231,47 @@ const EXPRESSIONS = {
   dance: { emoji: "💃", message: "is dancing with you!", label: "dance" },
   microphone: { emoji: "🎤", message: "sang to you!", label: "sing" },
   cheer: { emoji: "🎉", message: "is cheering for you!", label: "cheer" },
+  tickle: { emoji: "🤗", message: "is tickling you!", label: "tickle" },
+  boop: { emoji: "👉", message: "booped your nose!", label: "boop nose" },
+  support: {
+    emoji: "🫂",
+    message: "is here to support you!",
+    label: "support",
+  },
+  listen: {
+    emoji: "👂",
+    message: "is here to listen to you",
+    label: "listen",
+  },
+  comfort: {
+    emoji: "🫂",
+    message: "is comforting you with a gentle hug",
+    label: "comfort",
+  },
+  healing: {
+    emoji: "💝",
+    message: "sent healing energy your way",
+    label: "send healing",
+  },
+  proud: {
+    emoji: "🌟",
+    message: "is proud of you!",
+    label: "be proud",
+  },
+  gratitude: {
+    emoji: "🙏",
+    message: "is grateful to have you",
+    label: "show gratitude",
+  },
+  strength: {
+    emoji: "💪",
+    message: "sends you strength",
+    label: "send strength",
+  },
+  ninja: { emoji: "🥷", message: "sneaked up on you!", label: "ninja mode" },
+  magic: { emoji: "✨", message: "cast a magic spell!", label: "cast spell" },
+  kitty: { emoji: "😺", message: "sent kitty purrs!", label: "kitty purr" },
+  puppy: { emoji: "🐶", message: "sent puppy kisses!", label: "puppy kiss" },
 };
 
 const userStates = {};
@@ -234,9 +281,13 @@ async function handleSetMood(ctx) {
   const keyboard = MOOD_CATEGORIES.map((cat) => [
     { text: cat.label, callback_data: `moodcat:${cat.key}` },
   ]);
-  await ctx.reply("choose your mood category:", {
-    reply_markup: { inline_keyboard: keyboard },
-  });
+  await ctx.reply(
+    "🎭 <b>how are you feeling?</b>\n\nchoose your mood category:",
+    {
+      parse_mode: "HTML",
+      reply_markup: { inline_keyboard: keyboard },
+    }
+  );
 }
 
 async function handleCategorySelection(ctx, categoryKey) {
@@ -247,7 +298,7 @@ async function handleCategorySelection(ctx, categoryKey) {
   keyboard.push([
     { text: "⬅️ Back to categories", callback_data: "moodcat:back" },
   ]);
-  await ctx.editMessageText("Choose your mood:", {
+  await ctx.editMessageText("choose your mood:", {
     reply_markup: { inline_keyboard: keyboard },
   });
 }
@@ -264,7 +315,9 @@ async function handleBackToCategories(ctx) {
 
 async function handleMoodSelection(ctx, mood) {
   await db.setMood(ctx.from.id, mood);
-  await ctx.editMessageText(`your mood is now ${mood}!`);
+  await ctx.editMessageText(`✅ your mood is now set to <b>${mood}</b>!`, {
+    parse_mode: "HTML",
+  });
   const displayName =
     (await db.getDisplayName(ctx.from.id)) ||
     ctx.from.username ||
