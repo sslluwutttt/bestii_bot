@@ -296,7 +296,8 @@ async function handleCategorySelection(ctx, categoryKey) {
   const keyboard = moods.map((m) => [{ text: m, callback_data: `mood:${m}` }]);
   // Добавляем кнопку "⬅️ Back"
   keyboard.push([
-    { text: "⬅️ Back to categories", callback_data: "moodcat:back" },
+    { text: "⬅️ back to categories", callback_data: "moodcat:back" },
+    { text: "❌ cancel", callback_data: "cancel" },
   ]);
   await ctx.editMessageText("choose your mood:", {
     reply_markup: { inline_keyboard: keyboard },
@@ -308,6 +309,7 @@ async function handleBackToCategories(ctx) {
   const keyboard = MOOD_CATEGORIES.map((cat) => [
     { text: cat.label, callback_data: `moodcat:${cat.key}` },
   ]);
+  keyboard.push([{ text: "❌ Cancel", callback_data: "cancel" }]);
   await ctx.editMessageText("choose your mood category:", {
     reply_markup: { inline_keyboard: keyboard },
   });
@@ -337,7 +339,9 @@ async function handleMoodSelection(ctx, mood) {
 
 async function handleMyMood(ctx) {
   const mood = await db.getMood(ctx.from.id);
-  await ctx.reply(`Your mood: ${mood || "not set"}`);
+  await ctx.reply(`🙋‍♂️ <b>your mood:</b> <i>${mood || "not set"}</i>`, {
+    parse_mode: "HTML",
+  });
 }
 
 async function handleFriendsMoods(ctx) {
@@ -346,7 +350,9 @@ async function handleFriendsMoods(ctx) {
   const list = connections
     .map((c) => `@${c.username} - ${c.mood || "not set"}`)
     .join("\n");
-  await ctx.reply(`connections' moods:\n${list}`);
+  await ctx.reply(`👀 <b>connections' moods:</b>\n${list}`, {
+    parse_mode: "HTML",
+  });
 }
 
 async function handleSendInteraction(ctx) {
@@ -356,7 +362,8 @@ async function handleSendInteraction(ctx) {
     ctx.from.first_name;
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
-  if (connections.length === 0) return ctx.reply("no connections yet.");
+  if (connections.length === 0)
+    return ctx.reply("😔 <i>no connections yet.</i>", { parse_mode: "HTML" });
   const keyboard = await Promise.all(
     connections.map(async (c) => [
       {
@@ -368,14 +375,16 @@ async function handleSendInteraction(ctx) {
     ])
   );
   userStates[userId] = { step: "select_connection" };
-  await ctx.reply("сhoose a connection:", {
+  await ctx.reply("💌 <b>choose a connection:</b>", {
+    parse_mode: "HTML",
     reply_markup: { inline_keyboard: keyboard },
   });
 }
 
 async function handleMyConnections(ctx) {
   const connections = await db.getConnections(ctx.from.id);
-  if (connections.length === 0) return ctx.reply("no connections yet.");
+  if (connections.length === 0)
+    return ctx.reply("😔 <i>no connections yet.</i>", { parse_mode: "HTML" });
   const keyboard = connections.map((c) => [
     {
       text: `👤 ${c.username} (${c.relationship_type})`,
@@ -386,38 +395,51 @@ async function handleMyConnections(ctx) {
       callback_data: `setname:${c.user_id}`,
     },
   ]);
-  await ctx.reply("your connections:", {
+  await ctx.reply("👥 <b>Your connections:</b>", {
+    parse_mode: "HTML",
     reply_markup: { inline_keyboard: keyboard },
   });
 }
 
 async function handleSetNamePrompt(ctx, targetUserId) {
   userStates[ctx.from.id] = { step: "set_name", targetUserId };
-  await ctx.editMessageText("send me a new name for this user (max 32 chars):");
+  await ctx.editMessageText(
+    "✏️ <b>send me a new name for this user (max 32 chars):</b>",
+    { parse_mode: "HTML" }
+  );
 }
 
 async function handleEditRelationship(ctx, targetUserId) {
   const types = ["partner", "friend", "bestie"];
   const displayName =
-    (await db.getDisplayName(ctx.from.id)) ||
-    ctx.from.username ||
-    ctx.from.first_name;
+    (await db.getDisplayName(targetUserId)) ||
+    connection.username ||
+    connection.user_id;
 
   const connection = (await db.getConnections(ctx.from.id)).find(
     (c) => c.user_id == targetUserId
   );
-  if (!connection) return ctx.editMessageText("Connection not found.");
+  if (!connection)
+    return ctx.editMessageText("❌ <i>connection not found.</i>", {
+      parse_mode: "HTML",
+    });
   const keyboard = types
     .filter((t) => t !== connection.relationship_type)
     .map((type) => [
       {
-        text: `Change to ${type}`,
+        text: `🔄 change to ${type}`,
         callback_data: `setrel:${targetUserId}:${type}`,
       },
     ]);
-  keyboard.push([{ text: "⬅️ Back", callback_data: "connections:back" }]);
+  keyboard.push([
+    { text: "⬅️ Back", callback_data: "connections:back" },
+    { text: "❌ Cancel", callback_data: "cancel" },
+  ]);
+
   await ctx.editMessageText(
-    `@${displayName}\ncurrent: ${connection.relationship_type}\nchoose new type:`,
+    `@${displayName}\ncurrent: ${connection.relationship_type} ${
+      connection.relationship_type === "bestie" ? "💓" : "🕺🏻"
+    }\nchoose new type:`,
     { reply_markup: { inline_keyboard: keyboard } }
   );
 }
@@ -741,6 +763,12 @@ bot.on("callback_query", async (ctx) => {
   } else if (data.startsWith("setname:")) {
     const targetUserId = data.split(":")[1];
     await handleSetNamePrompt(ctx, targetUserId);
+    return ctx.answerCbQuery();
+  } else if (data === "cancel") {
+    delete userStates[userId];
+    await ctx.editMessageText("❌ <b>Action cancelled.</b>", {
+      parse_mode: "HTML",
+    });
     return ctx.answerCbQuery();
   }
   ctx.answerCbQuery();
