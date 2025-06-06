@@ -703,8 +703,12 @@ bot.on("callback_query", async (ctx) => {
     const receiverId = userStates[userId].selectedUserId;
     await db.sendExpression(userId, receiverId, expression);
     const receiver = await db.getUser(receiverId);
+    const receiverDisplayName =
+      (await db.getDisplayName(receiverId)) ||
+      receiver.username ||
+      receiver.first_name;
     await ctx.editMessageText(
-      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to @${receiver.username}!`
+      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to @${receiverDisplayName}!`
     );
     await bot.telegram.sendMessage(
       receiverId,
