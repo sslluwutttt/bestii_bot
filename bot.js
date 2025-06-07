@@ -6,17 +6,17 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 db.initDatabase();
 
 const MOOD_CATEGORIES = [
-  { key: "happy", label: "😊 Happy" },
-  { key: "love", label: "😍 Love & Affection" },
-  { key: "sad", label: "😢 Sad" },
-  { key: "angry", label: "😠 Angry" },
-  { key: "anxious", label: "😰 Anxious/Worried" },
-  { key: "tired", label: "😴 Tired/Exhausted" },
-  { key: "surprised", label: "😲 Surprised/Confused" },
-  { key: "calm", label: "😌 Calm/Peaceful" },
-  { key: "playful", label: "😜 Playful/Fun" },
-  { key: "confident", label: "😎 Confident/Proud" },
-  { key: "neutral", label: "😐 Neutral/Other" },
+  { key: "happy", label: "😊 happy" },
+  { key: "love", label: "😍 love & Affection" },
+  { key: "sad", label: "😢 sad" },
+  { key: "angry", label: "😠 angry" },
+  { key: "anxious", label: "😰 anxious/worried" },
+  { key: "tired", label: "😴 tired" },
+  { key: "surprised", label: "😲 surprised/confused" },
+  { key: "calm", label: "😌 calm" },
+  { key: "playful", label: "😜 playful/fun" },
+  { key: "confident", label: "😎 confident/proud" },
+  { key: "neutral", label: "😐 neutral/other" },
 ];
 
 const MOODS = {
