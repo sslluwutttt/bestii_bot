@@ -7,7 +7,7 @@ db.initDatabase();
 
 const MOOD_CATEGORIES = [
   { key: "happy", label: "😊 happy" },
-  { key: "love", label: "😍 love & Affection" },
+  { key: "love", label: "😍 love & affection" },
   { key: "sad", label: "😢 sad" },
   { key: "angry", label: "😠 angry" },
   { key: "anxious", label: "😰 anxious/worried" },
@@ -149,7 +149,10 @@ const EXPRESSION_CATEGORIES = [
   { key: "care", label: "🤗 care & support" },
   { key: "playful", label: "😜 playful & silly" },
   { key: "neutral", label: "😐 neutral" },
-  { key: "negative", label: "😈 mean" },
+  { key: "negative", label: "😈 mean & sad" },
+  { key: "food", label: "🍽️ food & drinks" },
+  { key: "animals", label: "🐾 animal vibes" },
+  { key: "weather", label: "🌈 weather moods" },
   { key: "other", label: "✨ other" },
 ];
 
@@ -394,6 +397,24 @@ const EXPRESSIONS = {
     label: "investigate",
     category: "other",
   },
+  bubble: {
+    emoji: "🫧",
+    message: "blew bubbles at you!",
+    label: "blow bubbles",
+    category: "playful",
+  },
+  pillow_fight: {
+    emoji: "🛏️",
+    message: "started a pillow fight!",
+    label: "pillow fight",
+    category: "playful",
+  },
+  ghost: {
+    emoji: "👻",
+    message: "spooked you playfully!",
+    label: "spook",
+    category: "playful",
+  },
 
   // Neutral
   sleep: {
@@ -426,8 +447,20 @@ const EXPRESSIONS = {
     label: "enjoy silence",
     category: "neutral",
   },
+  meditation: {
+    emoji: "🧘",
+    message: "is meditating peacefully...",
+    label: "meditate",
+    category: "neutral",
+  },
+  cloud_watching: {
+    emoji: "☁️",
+    message: "is watching clouds pass by...",
+    label: "watch clouds",
+    category: "neutral",
+  },
 
-  // mean
+  // negative
   poop: {
     emoji: "💩",
     message: "threw poop at you!",
@@ -500,6 +533,144 @@ const EXPRESSIONS = {
     label: "cry",
     category: "negative",
   },
+  grumpy: {
+    emoji: "😾",
+    message: "is being extra grumpy!",
+    label: "be grumpy",
+    category: "negative",
+  },
+  storm_cloud: {
+    emoji: "🌩️",
+    message: "has a storm cloud over their head",
+    label: "storm cloud",
+    category: "negative",
+  },
+
+  // Food & Drinks
+  coffee: {
+    emoji: "☕",
+    message: "offered you a cup of coffee!",
+    label: "offer coffee",
+    category: "food",
+  },
+  tea: {
+    emoji: "🫖",
+    message: "invited you for tea time!",
+    label: "tea time",
+    category: "food",
+  },
+  cookie: {
+    emoji: "🍪",
+    message: "shared a cookie with you!",
+    label: "share cookie",
+    category: "food",
+  },
+  pizza: {
+    emoji: "🍕",
+    message: "wants to share pizza with you!",
+    label: "share pizza",
+    category: "food",
+  },
+  cake: {
+    emoji: "🎂",
+    message: "baked you a cake!",
+    label: "bake cake",
+    category: "food",
+  },
+  soup: {
+    emoji: "🥣",
+    message: "made you warm soup!",
+    label: "make soup",
+    category: "food",
+  },
+  ice_cream: {
+    emoji: "🍦",
+    message: "brought you ice cream!",
+    label: "bring ice cream",
+    category: "food",
+  },
+
+  // Animal Vibes
+  purr: {
+    emoji: "😺",
+    message: "is purring happily!",
+    label: "purr",
+    category: "animals",
+  },
+  wag: {
+    emoji: "🐕",
+    message: "is wagging their tail!",
+    label: "wag tail",
+    category: "animals",
+  },
+  bird: {
+    emoji: "🐦",
+    message: "sent you a cheerful birdsong!",
+    label: "birdsong",
+    category: "animals",
+  },
+  butterfly: {
+    emoji: "🦋",
+    message: "sent butterflies your way!",
+    label: "butterflies",
+    category: "animals",
+  },
+  penguin_waddle: {
+    emoji: "🐧",
+    message: "waddled like a penguin!",
+    label: "penguin waddle",
+    category: "animals",
+  },
+  owl_wisdom: {
+    emoji: "🦉",
+    message: "shared owl wisdom!",
+    label: "owl wisdom",
+    category: "animals",
+  },
+  seal_clap: {
+    emoji: "🦭",
+    message: "clapped like a happy seal!",
+    label: "seal clap",
+    category: "animals",
+  },
+
+  // Weather Moods
+  rainbow: {
+    emoji: "🌈",
+    message: "sent you a rainbow!",
+    label: "send rainbow",
+    category: "weather",
+  },
+  snow: {
+    emoji: "❄️",
+    message: "sent snowflakes your way!",
+    label: "send snow",
+    category: "weather",
+  },
+  breeze: {
+    emoji: "🍃",
+    message: "sent a gentle breeze!",
+    label: "send breeze",
+    category: "weather",
+  },
+  stars: {
+    emoji: "✨",
+    message: "is stargazing with you!",
+    label: "stargaze",
+    category: "weather",
+  },
+  thunder: {
+    emoji: "⚡",
+    message: "made dramatic thunder!",
+    label: "make thunder",
+    category: "weather",
+  },
+  aurora: {
+    emoji: "🌌",
+    message: "showed you northern lights!",
+    label: "show aurora",
+    category: "weather",
+  },
 
   // Other
   ninja: {
@@ -528,12 +699,7 @@ const EXPRESSIONS = {
   },
 };
 
-const ADMIN_IDS = [437651331];
 const userStates = {};
-
-function isAdmin(userId) {
-  return ADMIN_IDS.includes(userId);
-}
 
 async function handleSetMood(ctx) {
   userStates[ctx.from.id] = { step: "choose_category" };
@@ -576,7 +742,6 @@ async function handleBackToCategories(ctx) {
 
 async function handleMoodSelection(ctx, mood) {
   await db.setMood(ctx.from.id, mood);
-  await db.logUserAction(ctx.from.id, "mood", `set mood to: ${mood}`);
   await ctx.editMessageText(`✅ your mood is now set to <b>${mood}</b>!`, {
     parse_mode: "HTML",
   });
@@ -790,92 +955,6 @@ bot.command("start", async (ctx) => {
   );
 });
 
-bot.command("admin", async (ctx) => {
-  if (!isAdmin(ctx.from.id)) {
-    return ctx.reply("⛔ access denied");
-  }
-
-  const keyboard = [
-    [{ text: "📊 recent actions" }],
-    [{ text: "📈 statistics" }],
-    [{ text: "❌ close admin panel" }],
-  ];
-
-  await ctx.reply("🔐 <b>admin Panel</b>\n\nselect an option:", {
-    parse_mode: "HTML",
-    reply_markup: {
-      keyboard,
-      resize_keyboard: true,
-      one_time_keyboard: false,
-    },
-  });
-});
-
-bot.hears("📊 recent Actions", async (ctx) => {
-  if (!isAdmin(ctx.from.id)) return;
-
-  const logs = await db.getRecentLogs(20);
-  if (logs.length === 0) {
-    return ctx.reply("no recent actions found.");
-  }
-
-  const formatLog = (log) => {
-    const date = new Date(log.timestamp).toLocaleString();
-    return `${date}\n@${log.username}: ${log.action_type}\n${log.details}\n`;
-  };
-
-  const message = logs.map(formatLog).join("\n");
-  await ctx.reply(`📊 <b>recent Actions:</b>\n\n${message}`, {
-    parse_mode: "HTML",
-  });
-});
-
-bot.hears("📈 statistics", async (ctx) => {
-  if (!isAdmin(ctx.from.id)) return;
-
-  const stats = await db
-    .prepare(
-      `
-    SELECT 
-      COUNT(DISTINCT user_id) as total_users,
-      COUNT(*) as total_actions,
-      COUNT(CASE WHEN action_type = 'mood' THEN 1 END) as mood_updates,
-      COUNT(CASE WHEN action_type = 'expression' THEN 1 END) as expressions_sent,
-      COUNT(CASE WHEN action_type = 'message' THEN 1 END) as messages_received
-    FROM logs;
-  `
-    )
-    .get();
-
-  await ctx.reply(
-    `📈 <b>statistics:</b>\n\n` +
-      `total users: ${stats.total_users}\n` +
-      `total actions: ${stats.total_actions}\n` +
-      `mood updates: ${stats.mood_updates}\n` +
-      `expressions sent: ${stats.expressions_sent}\n` +
-      `messages received: ${stats.messages_received}`,
-    { parse_mode: "HTML" }
-  );
-});
-
-bot.hears("❌ close admin panel", async (ctx) => {
-  if (!isAdmin(ctx.from.id)) return;
-
-  // Return to normal keyboard
-  await ctx.reply("admin panel closed", {
-    reply_markup: {
-      keyboard: [
-        [{ text: "😊 set mood" }, { text: "💌 send interaction" }],
-        [{ text: "🙋‍♂️ my mood" }, { text: "👀 friends' moods" }],
-        [{ text: "🔗 connect" }, { text: "👥 my connections" }],
-        [{ text: "⏳ pending requests" }, { text: "❌ break the connection" }],
-        [{ text: "ℹ️ help" }],
-      ],
-      resize_keyboard: true,
-    },
-  });
-});
-
 bot.command("help", handleHelp);
 bot.hears("ℹ️ help", handleHelp);
 
@@ -1002,8 +1081,6 @@ bot.hears("💌 send interaction", handleSendInteraction);
 
 bot.on("text", async (ctx, next) => {
   const state = userStates[ctx.from.id];
-  await db.logUserAction(ctx.from.id, "message", 
-    `sent message: ${ctx.message.text.slice(0, 50)}...`);
   if (state?.step === "set_name" && state.targetUserId) {
     const newName = ctx.message.text.trim().slice(0, 32);
     await db.setDisplayName(state.targetUserId, newName);
@@ -1096,11 +1173,6 @@ bot.on("callback_query", async (ctx) => {
     const expression = data.split(":")[1];
     const receiverId = userStates[userId].selectedUserId;
     await db.sendExpression(userId, receiverId, expression);
-    await db.logUserAction(
-      userId,
-      "expression",
-      `sent ${expression} to user ${receiverId}`
-    );
     const receiver = await db.getUser(receiverId);
     const receiverDisplayName =
       (await db.getDisplayName(receiverId)) ||
