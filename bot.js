@@ -146,132 +146,388 @@ const MOODS = {
   ],
 };
 
+const EXPRESSION_CATEGORIES = [
+  { key: "positive", label: "😊 positive" },
+  { key: "care", label: "🤗 care & support" },
+  { key: "playful", label: "😜 playful & silly" },
+  { key: "neutral", label: "😐 neutral" },
+  { key: "negative", label: "😈 mean" },
+  { key: "other", label: "✨ other" },
+];
+
 const EXPRESSIONS = {
-  hug: { emoji: "🤗", message: "sent you a warm hug!", label: "send a hug" },
-  kiss: { emoji: "😘", message: "blew you a kiss!", label: "blow a kiss" },
-  heart: { emoji: "❤️", message: "sent you love!", label: "send love" },
+  // Positive
+  hug: {
+    emoji: "🤗",
+    message: "sent you a warm hug!",
+    label: "send a hug",
+    category: "positive",
+  },
+  kiss: {
+    emoji: "😘",
+    message: "blew you a kiss!",
+    label: "blow a kiss",
+    category: "positive",
+  },
+  heart: {
+    emoji: "❤️",
+    message: "sent you love!",
+    label: "send love",
+    category: "positive",
+  },
   cuddle: {
     emoji: "🫂",
     message: "wants to cuddle with you!",
     label: "cuddle",
+    category: "positive",
   },
-  smile: { emoji: "😊", message: "smiled at you!", label: "send a smile" },
-  wink: { emoji: "😉", message: "winked at you!", label: "wink" },
+  smile: {
+    emoji: "😊",
+    message: "smiled at you!",
+    label: "send a smile",
+    category: "positive",
+  },
+  wink: {
+    emoji: "😉",
+    message: "winked at you!",
+    label: "wink",
+    category: "positive",
+  },
   high_five: {
     emoji: "🙏",
     message: "gave you a high five!",
     label: "high five",
+    category: "positive",
   },
   thumbs_up: {
     emoji: "👍",
     message: "gave you thumbs up!",
     label: "thumbs up",
+    category: "positive",
   },
-  clap: { emoji: "👏", message: "is clapping for you!", label: "clap" },
-  handshake: { emoji: "🤝", message: "shook your hand!", label: "handshake" },
-  wave: { emoji: "👋", message: "waved at you!", label: "wave" },
-  loud: { emoji: "🥁", message: "wants you to wake up!", label: "wake up!" },
+  clap: {
+    emoji: "👏",
+    message: "is clapping for you!",
+    label: "clap",
+    category: "positive",
+  },
+  handshake: {
+    emoji: "🤝",
+    message: "shook your hand!",
+    label: "handshake",
+    category: "positive",
+  },
+  wave: {
+    emoji: "👋",
+    message: "waved at you!",
+    label: "wave",
+    category: "positive",
+  },
   sun: {
     emoji: "🌞",
     message: "wished you a good morning!",
     label: "good morning",
+    category: "positive",
   },
   moon: {
     emoji: "🌙",
     message: "wished you sweet dreams!",
     label: "sweet dreams",
+    category: "positive",
   },
+  cheer: {
+    emoji: "🎉",
+    message: "is cheering for you!",
+    label: "cheer",
+    category: "positive",
+  },
+  dance: {
+    emoji: "💃",
+    message: "is dancing with you!",
+    label: "dance",
+    category: "positive",
+  },
+  blush: {
+    emoji: "😊",
+    message: "blushed because of you!",
+    label: "blush",
+    category: "positive",
+  },
+  good_luck: {
+    emoji: "🍀",
+    message: "wished you good luck!",
+    label: "wish good luck",
+    category: "positive",
+  },
+  trophy: {
+    emoji: "🏆",
+    message: "thinks you deserve a trophy!",
+    label: "deserve trophy",
+    category: "positive",
+  },
+  fireworks: {
+    emoji: "🎆",
+    message: "is celebrating with fireworks!",
+    label: "celebrate with fireworks",
+    category: "positive",
+  },
+
+  // Care & Support
   umbrella: {
     emoji: "☂️",
     message: "offered you an umbrella!",
     label: "offer umbrella",
+    category: "care",
   },
-  fan: { emoji: "🪭", message: "offered you a fan!", label: "offer a fan" },
-  shield: { emoji: "🛡️", message: "is protecting you!", label: "protect" },
-  pat: { emoji: "🐾", message: "pat you!", label: "pat" },
-  poop: { emoji: "💩", message: "threw poop at you!", label: "throw poop" },
-  slap: { emoji: "🖐️", message: "slapped you!", label: "slap" },
-  ignore: { emoji: "🙈", message: "is ignoring you.", label: "ignore" },
-  facepalm: {
-    emoji: "🤦",
-    message: "is disappointed in you.",
-    label: "facepalm",
+  fan: {
+    emoji: "🪭",
+    message: "offered you a fan!",
+    label: "offer a fan",
+    category: "care",
   },
-  eye_roll: {
-    emoji: "🙄",
-    message: "rolled their eyes at you.",
-    label: "roll eyes",
+  blanket: {
+    emoji: "🛏️",
+    message: "wrapped you in a warm blanket!",
+    label: "warm blanket",
+    category: "care",
   },
-  fist: { emoji: "👊", message: "raised a fist at you!", label: "fist bump" },
-  hmph: {
-    emoji: "😒",
-    message: "said 'hmph!' and turned away!",
-    label: "hmph!",
+  medicine: {
+    emoji: "💊",
+    message: "brought you medicine!",
+    label: "bring medicine",
+    category: "care",
   },
-  hiss: {
-    emoji: "😾",
-    message: "hissed at you like an angry cat!",
-    label: "hiss",
+  bandaid: {
+    emoji: "🩹",
+    message: "put a band-aid on your boo-boo!",
+    label: "put a band-aid",
+    category: "care",
   },
-  silent: {
-    emoji: "🤐",
-    message: "is giving you the silent treatment.",
-    label: "silent treatment",
+  shield: {
+    emoji: "🛡️",
+    message: "is protecting you!",
+    label: "protect",
+    category: "care",
   },
-  tantrum: {
-    emoji: "😤",
-    message: "is throwing a tantrum!",
-    label: "throw tantrum",
-  },
-  sigh: { emoji: "😔", message: "sighed deeply at you!", label: "sigh" },
-  cry: { emoji: "😢", message: "is crying because of you!", label: "cry" },
-  blush: { emoji: "😊", message: "blushed because of you!", label: "blush" },
-  sleep: { emoji: "😴", message: "fell asleep on you!", label: "fall asleep" },
-  hungry: { emoji: "🤤", message: "is drooling with hunger!", label: "hungry" },
-  dance: { emoji: "💃", message: "is dancing with you!", label: "dance" },
-  microphone: { emoji: "🎤", message: "sang to you!", label: "sing" },
-  cheer: { emoji: "🎉", message: "is cheering for you!", label: "cheer" },
-  tickle: { emoji: "🤗", message: "is tickling you!", label: "tickle" },
-  boop: { emoji: "👉", message: "booped your nose!", label: "boop nose" },
   support: {
     emoji: "🫂",
     message: "is here to support you!",
     label: "support",
+    category: "care",
   },
   listen: {
     emoji: "👂",
     message: "is here to listen to you",
     label: "listen",
+    category: "care",
   },
   comfort: {
     emoji: "🫂",
     message: "is comforting you with a gentle hug",
     label: "comfort",
+    category: "care",
   },
   healing: {
     emoji: "💝",
     message: "sent healing energy your way",
     label: "send healing",
+    category: "care",
   },
   proud: {
     emoji: "🌟",
     message: "is proud of you!",
     label: "be proud",
+    category: "care",
   },
   gratitude: {
     emoji: "🙏",
     message: "is grateful to have you",
     label: "show gratitude",
+    category: "care",
   },
   strength: {
     emoji: "💪",
     message: "sends you strength",
     label: "send strength",
+    category: "care",
   },
-  ninja: { emoji: "🥷", message: "sneaked up on you!", label: "ninja mode" },
-  magic: { emoji: "✨", message: "cast a magic spell!", label: "cast spell" },
-  kitty: { emoji: "😺", message: "sent kitty purrs!", label: "kitty purr" },
-  puppy: { emoji: "🐶", message: "sent puppy kisses!", label: "puppy kiss" },
+
+  // Playful
+  tickle: {
+    emoji: "🤗",
+    message: "is tickling you!",
+    label: "tickle",
+    category: "playful",
+  },
+  silly_dance: {
+    emoji: "👯",
+    message: "is doing a silly dance!",
+    label: "silly dance",
+    category: "playful",
+  },
+  pat: { emoji: "🐾", message: "pat you!", label: "pat", category: "care" },
+  boop: {
+    emoji: "👉",
+    message: "booped your nose!",
+    label: "boop nose",
+    category: "playful",
+  },
+  loud: {
+    emoji: "🥁",
+    message: "wants you to wake up!",
+    label: "wake up!",
+    category: "playful",
+  },
+  peek: {
+    emoji: "👀",
+    message: "is playing peek-a-boo!",
+    label: "peek-a-boo",
+    category: "playful",
+  },
+  microphone: {
+    emoji: "🎤",
+    message: "sang to you!",
+    label: "sing",
+    category: "playful",
+  },
+  detective: {
+    emoji: "🕵️",
+    message: "is investigating you!",
+    label: "investigate",
+    category: "other",
+  },
+
+  // Neutral
+  sleep: {
+    emoji: "😴",
+    message: "fell asleep on you!",
+    label: "fall asleep",
+    category: "neutral",
+  },
+  hungry: {
+    emoji: "🤤",
+    message: "is drooling with hunger!",
+    label: "hungry",
+    category: "neutral",
+  },
+  think: {
+    emoji: "🤔",
+    message: "is thinking about what you said...",
+    label: "think",
+    category: "neutral",
+  },
+  wait: {
+    emoji: "⌛",
+    message: "asks you to wait a moment...",
+    label: "ask to wait",
+    category: "neutral",
+  },
+  silence: {
+    emoji: "🤫",
+    message: "is enjoying the silence...",
+    label: "enjoy silence",
+    category: "neutral",
+  },
+
+  // mean
+  poop: {
+    emoji: "💩",
+    message: "threw poop at you!",
+    label: "throw poop",
+    category: "negative",
+  },
+  slap: {
+    emoji: "🖐️",
+    message: "slapped you!",
+    label: "slap",
+    category: "negative",
+  },
+  ignore: {
+    emoji: "🙈",
+    message: "is ignoring you.",
+    label: "ignore",
+    category: "negative",
+  },
+  facepalm: {
+    emoji: "🤦",
+    message: "is disappointed in you.",
+    label: "facepalm",
+    category: "negative",
+  },
+  eye_roll: {
+    emoji: "🙄",
+    message: "rolled their eyes at you.",
+    label: "roll eyes",
+    category: "negative",
+  },
+  fist: {
+    emoji: "👊",
+    message: "raised a fist at you!",
+    label: "fist bump",
+    category: "negative",
+  },
+  hmph: {
+    emoji: "😒",
+    message: "said 'hmph!' and turned away!",
+    label: "hmph!",
+    category: "negative",
+  },
+  hiss: {
+    emoji: "😾",
+    message: "hissed at you like an angry cat!",
+    label: "hiss",
+    category: "negative",
+  },
+  silent: {
+    emoji: "🤐",
+    message: "is giving you the silent treatment.",
+    label: "silent treatment",
+    category: "negative",
+  },
+  tantrum: {
+    emoji: "😤",
+    message: "is throwing a tantrum!",
+    label: "throw tantrum",
+    category: "negative",
+  },
+  sigh: {
+    emoji: "😔",
+    message: "sighed deeply at you!",
+    label: "sigh",
+    category: "negative",
+  },
+  cry: {
+    emoji: "😢",
+    message: "is crying because of you!",
+    label: "cry",
+    category: "negative",
+  },
+
+  // Other
+  ninja: {
+    emoji: "🥷",
+    message: "sneaked up on you!",
+    label: "ninja mode",
+    category: "other",
+  },
+  magic: {
+    emoji: "✨",
+    message: "cast a magic spell!",
+    label: "cast spell",
+    category: "other",
+  },
+  kitty: {
+    emoji: "😺",
+    message: "sent kitty purrs!",
+    label: "kitty purr",
+    category: "other",
+  },
+  puppy: {
+    emoji: "🐶",
+    message: "sent puppy kisses!",
+    label: "puppy kiss",
+    category: "other",
+  },
 };
 
 const userStates = {};
@@ -698,18 +954,45 @@ bot.on("callback_query", async (ctx) => {
       );
       await ctx.editMessageText("request declined.");
     }
-  } else if (
+  }
+  if (
     userStates[userId]?.step === "select_connection" &&
     data.startsWith("conn:")
   ) {
     const selectedUserId = data.split(":")[1];
-    userStates[userId] = { step: "select_expression", selectedUserId };
-    const keyboard = Object.keys(EXPRESSIONS).map((e) => [
+    userStates[userId] = { step: "select_expression_category", selectedUserId };
+    // Показываем категории выражений
+    const keyboard = EXPRESSION_CATEGORIES.map((cat) => [
       {
-        text: `${EXPRESSIONS[e].emoji} ${EXPRESSIONS[e].label}`,
-        callback_data: `exp:${e}`,
+        text: cat.label,
+        callback_data: `expcat:${cat.key}`,
       },
     ]);
+    keyboard.push([{ text: "⬅️ Back", callback_data: "back:connections" }]);
+    await ctx.editMessageText("choose an expression category:", {
+      reply_markup: { inline_keyboard: keyboard },
+    });
+  } else if (
+    userStates[userId]?.step === "select_expression_category" &&
+    data.startsWith("expcat:")
+  ) {
+    const categoryKey = data.split(":")[1];
+    userStates[userId].step = "select_expression";
+    userStates[userId].categoryKey = categoryKey;
+    // Показываем выражения выбранной категории
+    const expressions = Object.entries(EXPRESSIONS)
+      .filter(([_, v]) => v.category === categoryKey)
+      .map(([k, v]) => ({
+        key: k,
+        ...v,
+      }));
+    const keyboard = expressions.map((e) => [
+      {
+        text: `${e.emoji} ${e.label}`,
+        callback_data: `exp:${e.key}`,
+      },
+    ]);
+    keyboard.push([{ text: "⬅️ Back", callback_data: "back:expcat" }]);
     await ctx.editMessageText("choose an expression:", {
       reply_markup: { inline_keyboard: keyboard },
     });
@@ -737,6 +1020,43 @@ bot.on("callback_query", async (ctx) => {
       `@${displayName} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
     );
     delete userStates[userId];
+  } else if (
+    userStates[userId]?.step === "select_expression" &&
+    data === "back:expcat"
+  ) {
+    // Вернуться к выбору категории
+    userStates[userId].step = "select_expression_category";
+    const keyboard = EXPRESSION_CATEGORIES.map((cat) => [
+      {
+        text: cat.label,
+        callback_data: `expcat:${cat.key}`,
+      },
+    ]);
+    keyboard.push([{ text: "⬅️ Back", callback_data: "back:connections" }]);
+    await ctx.editMessageText("choose an expression category:", {
+      reply_markup: { inline_keyboard: keyboard },
+    });
+  } else if (
+    userStates[userId]?.step === "select_expression_category" &&
+    data === "back:connections"
+  ) {
+    // Вернуться к выбору пользователя
+    userStates[userId] = { step: "select_connection" };
+    const connections = await db.getConnections(userId);
+    const keyboard = await Promise.all(
+      connections.map(async (c) => [
+        {
+          text: `${
+            (await db.getDisplayName(c.user_id)) || c.username || c.user_id
+          }`,
+          callback_data: `conn:${c.user_id}`,
+        },
+      ])
+    );
+    await ctx.editMessageText("💌 <b>choose a connection:</b>", {
+      parse_mode: "HTML",
+      reply_markup: { inline_keyboard: keyboard },
+    });
   } else if (data.startsWith("mood:")) {
     const mood = data.split(":")[1];
     await handleMoodSelection(ctx, mood);
