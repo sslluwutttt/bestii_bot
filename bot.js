@@ -26,8 +26,6 @@ const MOODS = {
     "🤩 excited",
     "🥳 ecstatic",
     "😁 cheerful",
-    "🤗 elated",
-    "🌟 euphoric",
     "🌱 optimistic",
     "🌈 positive",
     "🦋 inspired",
@@ -530,7 +528,12 @@ const EXPRESSIONS = {
   },
 };
 
+const ADMIN_IDS = [437651331];
 const userStates = {};
+
+function isAdmin(userId) {
+  return ADMIN_IDS.includes(userId);
+}
 
 async function handleSetMood(ctx) {
   userStates[ctx.from.id] = { step: "choose_category" };
@@ -573,6 +576,7 @@ async function handleBackToCategories(ctx) {
 
 async function handleMoodSelection(ctx, mood) {
   await db.setMood(ctx.from.id, mood);
+  await db.logUserAction(ctx.from.id, "mood", `set mood to: ${mood}`);
   await ctx.editMessageText(`✅ your mood is now set to <b>${mood}</b>!`, {
     parse_mode: "HTML",
   });
@@ -612,14 +616,11 @@ async function handleFriendsMoods(ctx) {
 }
 
 async function handleSendInteraction(ctx) {
-  const displayName =
-    (await db.getDisplayName(ctx.from.id)) ||
-    ctx.from.username ||
-    ctx.from.first_name;
   const userId = ctx.from.id;
   const connections = await db.getConnections(userId);
-  if (connections.length === 0)
+  if (connections.length === 0) {
     return ctx.reply("😔 <i>no connections yet.</i>", { parse_mode: "HTML" });
+  }
   const keyboard = await Promise.all(
     connections.map(async (c) => [
       {
@@ -789,6 +790,92 @@ bot.command("start", async (ctx) => {
   );
 });
 
+bot.command("admin", async (ctx) => {
+  if (!isAdmin(ctx.from.id)) {
+    return ctx.reply("⛔ access denied");
+  }
+
+  const keyboard = [
+    [{ text: "📊 recent actions" }],
+    [{ text: "📈 statistics" }],
+    [{ text: "❌ close admin panel" }],
+  ];
+
+  await ctx.reply("🔐 <b>admin Panel</b>\n\nselect an option:", {
+    parse_mode: "HTML",
+    reply_markup: {
+      keyboard,
+      resize_keyboard: true,
+      one_time_keyboard: false,
+    },
+  });
+});
+
+bot.hears("📊 recent Actions", async (ctx) => {
+  if (!isAdmin(ctx.from.id)) return;
+
+  const logs = await db.getRecentLogs(20);
+  if (logs.length === 0) {
+    return ctx.reply("no recent actions found.");
+  }
+
+  const formatLog = (log) => {
+    const date = new Date(log.timestamp).toLocaleString();
+    return `${date}\n@${log.username}: ${log.action_type}\n${log.details}\n`;
+  };
+
+  const message = logs.map(formatLog).join("\n");
+  await ctx.reply(`📊 <b>recent Actions:</b>\n\n${message}`, {
+    parse_mode: "HTML",
+  });
+});
+
+bot.hears("📈 statistics", async (ctx) => {
+  if (!isAdmin(ctx.from.id)) return;
+
+  const stats = await db
+    .prepare(
+      `
+    SELECT 
+      COUNT(DISTINCT user_id) as total_users,
+      COUNT(*) as total_actions,
+      COUNT(CASE WHEN action_type = 'mood' THEN 1 END) as mood_updates,
+      COUNT(CASE WHEN action_type = 'expression' THEN 1 END) as expressions_sent,
+      COUNT(CASE WHEN action_type = 'message' THEN 1 END) as messages_received
+    FROM logs;
+  `
+    )
+    .get();
+
+  await ctx.reply(
+    `📈 <b>statistics:</b>\n\n` +
+      `total users: ${stats.total_users}\n` +
+      `total actions: ${stats.total_actions}\n` +
+      `mood updates: ${stats.mood_updates}\n` +
+      `expressions sent: ${stats.expressions_sent}\n` +
+      `messages received: ${stats.messages_received}`,
+    { parse_mode: "HTML" }
+  );
+});
+
+bot.hears("❌ close admin panel", async (ctx) => {
+  if (!isAdmin(ctx.from.id)) return;
+
+  // Return to normal keyboard
+  await ctx.reply("admin panel closed", {
+    reply_markup: {
+      keyboard: [
+        [{ text: "😊 set mood" }, { text: "💌 send interaction" }],
+        [{ text: "🙋‍♂️ my mood" }, { text: "👀 friends' moods" }],
+        [{ text: "🔗 connect" }, { text: "👥 my connections" }],
+        [{ text: "⏳ pending requests" }, { text: "❌ break the connection" }],
+        [{ text: "ℹ️ help" }],
+      ],
+      resize_keyboard: true,
+    },
+  });
+});
+
 bot.command("help", handleHelp);
 bot.hears("ℹ️ help", handleHelp);
 
@@ -915,6 +1002,8 @@ bot.hears("💌 send interaction", handleSendInteraction);
 
 bot.on("text", async (ctx, next) => {
   const state = userStates[ctx.from.id];
+  await db.logUserAction(ctx.from.id, "message", 
+    `sent message: ${ctx.message.text.slice(0, 50)}...`);
   if (state?.step === "set_name" && state.targetUserId) {
     const newName = ctx.message.text.trim().slice(0, 32);
     await db.setDisplayName(state.targetUserId, newName);
@@ -1007,6 +1096,11 @@ bot.on("callback_query", async (ctx) => {
     const expression = data.split(":")[1];
     const receiverId = userStates[userId].selectedUserId;
     await db.sendExpression(userId, receiverId, expression);
+    await db.logUserAction(
+      userId,
+      "expression",
+      `sent ${expression} to user ${receiverId}`
+    );
     const receiver = await db.getUser(receiverId);
     const receiverDisplayName =
       (await db.getDisplayName(receiverId)) ||
