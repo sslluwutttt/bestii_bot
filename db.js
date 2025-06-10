@@ -217,7 +217,14 @@ function getRecentLogs(limit = 50) {
   return stmt.all(limit);
 }
 
+async function getAllUsers() {
+  const query = "SELECT user_id FROM users"; // Adjust based on your database schema
+  const result = await db.query(query);
+  return result.rows; // Assuming rows contain user IDs
+}
+
 module.exports = {
+  getAllUsers,
   initDatabase,
   registerUser,
   getUser,

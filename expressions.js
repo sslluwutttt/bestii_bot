@@ -43,6 +43,12 @@ const EXPRESSIONS = {
     label: "send a smile",
     category: "positive",
   },
+  smile_back: {
+    emoji: "😊",
+    message: "smiled back at you warmly!",
+    label: "smile back",
+    category: "positive",
+  },
   wink: {
     emoji: "😉",
     message: "winked at you!",
@@ -127,6 +133,18 @@ const EXPRESSIONS = {
     label: "celebrate with fireworks",
     category: "positive",
   },
+  admire: {
+    emoji: "😍",
+    message: "admires you greatly!",
+    label: "admire",
+    category: "positive",
+  },
+  share_happiness: {
+    emoji: "🎈",
+    message: "shared their happiness with you!",
+    label: "share happiness",
+    category: "positive",
+  },
 
   // Care & Support
   umbrella: {
@@ -183,6 +201,12 @@ const EXPRESSIONS = {
     label: "comfort",
     category: "care",
   },
+  offer_tissue: {
+    emoji: "🤧",
+    message: "offered you a tissue...",
+    label: "offer tissue",
+    category: "sad",
+  },
   healing: {
     emoji: "💝",
     message: "sent healing energy your way",
@@ -223,6 +247,48 @@ const EXPRESSIONS = {
     emoji: "🧘‍♀️",
     message: "helps you find inner peace",
     label: "help with meditation",
+    category: "care",
+  },
+  encourage: {
+    emoji: "💪",
+    message: "encouraged you to keep going!",
+    label: "encourage",
+    category: "positive",
+  },
+  reassure: {
+    emoji: "🤗",
+    message: "reassured you with kind words!",
+    label: "reassure",
+    category: "care",
+  },
+  check_in: {
+    emoji: "📞",
+    message: "checked in to see how you're doing!",
+    label: "check in",
+    category: "care",
+  },
+  hold_hand: {
+    emoji: "✋",
+    message: "held your hand for comfort!",
+    label: "hold hand",
+    category: "care",
+  },
+  warm_meal: {
+    emoji: "🍲",
+    message: "prepared a warm meal for you!",
+    label: "prepare meal",
+    category: "care",
+  },
+  safe_space: {
+    emoji: "🏠",
+    message: "created a safe space for you!",
+    label: "safe space",
+    category: "care",
+  },
+  stay_by_side: {
+    emoji: "🛋️",
+    message: "stayed by your side through tough times!",
+    label: "stay by side",
     category: "care",
   },
 
@@ -312,14 +378,20 @@ const EXPRESSIONS = {
     label: "splash",
     category: "playful",
   },
-  confetti: {
-    emoji: "🎊",
-    message: "threw confetti in the air!",
-    label: "throw confetti",
+  playful_poke: {
+    emoji: "👉",
+    message: "playfully poked you!",
+    label: "poke",
     category: "playful",
   },
 
   // Neutral
+  sleep: {
+    emoji: "🥺",
+    message: "wants your attention!",
+    label: "ask for attention",
+    category: "neutral",
+  },
   sleep: {
     emoji: "😴",
     message: "fell asleep on you!",
@@ -338,6 +410,18 @@ const EXPRESSIONS = {
     label: "think",
     category: "neutral",
   },
+  reflect: {
+    emoji: "🪞",
+    message: "is reflecting on your words...",
+    label: "reflect",
+    category: "neutral",
+  },
+  sit_together: {
+    emoji: "🪑",
+    message: "sat quietly with you...",
+    label: "sit together",
+    category: "neutral",
+  },
   wait: {
     emoji: "⌛",
     message: "asks you to wait a moment...",
@@ -348,6 +432,18 @@ const EXPRESSIONS = {
     emoji: "🤫",
     message: "is enjoying the silence...",
     label: "enjoy silence",
+    category: "neutral",
+  },
+  breathe: {
+    emoji: "🌬️",
+    message: "took a deep breath with you...",
+    label: "breathe",
+    category: "neutral",
+  },
+  share_space: {
+    emoji: "🛋️",
+    message: "shared a peaceful space with you...",
+    label: "share space",
     category: "neutral",
   },
   meditation: {
@@ -418,12 +514,6 @@ const EXPRESSIONS = {
     label: "rain cloud",
     category: "sad",
   },
-  wilted_flower: {
-    emoji: "🥀",
-    message: "feels like a wilted flower",
-    label: "wilt",
-    category: "sad",
-  },
   tissue: {
     emoji: "🤧",
     message: "needs a tissue",
@@ -440,12 +530,6 @@ const EXPRESSIONS = {
     emoji: "👋",
     message: "waves a sad goodbye",
     label: "sad goodbye",
-    category: "sad",
-  },
-  rain_puddle: {
-    emoji: "☔",
-    message: "stepped in a sad puddle",
-    label: "sad puddle",
     category: "sad",
   },
 
@@ -610,11 +694,17 @@ const EXPRESSIONS = {
   },
 
   // Animal Vibes
-  purr: {
+  kitty: {
     emoji: "😺",
-    message: "is purring happily!",
-    label: "purr",
-    category: "animals",
+    message: "sent kitty purrs!",
+    label: "kitty purr",
+    category: "other",
+  },
+  puppy: {
+    emoji: "🐶",
+    message: "sent puppy kisses!",
+    label: "puppy kiss",
+    category: "other",
   },
   wag: {
     emoji: "🐕",
@@ -764,22 +854,22 @@ const EXPRESSIONS = {
     label: "cast spell",
     category: "other",
   },
-  kitty: {
-    emoji: "😺",
-    message: "sent kitty purrs!",
-    label: "kitty purr",
-    category: "other",
-  },
-  puppy: {
-    emoji: "🐶",
-    message: "sent puppy kisses!",
-    label: "puppy kiss",
-    category: "other",
+  forgive: {
+    emoji: "🕊️",
+    message: "is ready to forgive you.",
+    label: "forgive",
+    category: "care",
   },
   time_travel: {
     emoji: "⌛",
     message: "took you time traveling",
     label: "time travel",
+    category: "other",
+  },
+  teleport: {
+    emoji: "⌛",
+    message: "teleported to you!",
+    label: "teleport",
     category: "other",
   },
   alien_visit: {

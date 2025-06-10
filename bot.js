@@ -9,6 +9,31 @@ db.initDatabase();
 
 const userStates = {};
 
+async function handleBroadcast(ctx) {
+  const adminId = process.env.ADMIN_ID;
+  if (ctx.from.id.toString() !== adminId) {
+    return ctx.reply("❌ you are not authorized to use this command.");
+  }
+
+  const message = ctx.message.text.replace("/broadcast", "").trim();
+  if (!message) {
+    return ctx.reply("❌ please provide a message to broadcast.");
+  }
+
+  const users = await db.getAllUsers(); // Ensure `getAllUsers` is implemented in your database module
+  for (const user of users) {
+    try {
+      await bot.telegram.sendMessage(user.user_id, message, {
+        parse_mode: "HTML",
+      });
+    } catch (error) {
+      console.error(`failed to send message to user ${user.user_id}:`, error);
+    }
+  }
+
+  await ctx.reply(`✅ broadcast message sent to all users: ${message}`);
+}
+
 async function handleSetMood(ctx) {
   userStates[ctx.from.id] = { step: "choose_category" };
   const keyboard = MOOD_CATEGORIES.map((cat) => [
@@ -262,6 +287,8 @@ bot.command("start", async (ctx) => {
     }
   );
 });
+
+bot.command("broadcast", handleBroadcast);
 
 bot.command("help", handleHelp);
 bot.hears("ℹ️ help", handleHelp);
