@@ -407,13 +407,13 @@ const EXPRESSIONS = {
   think: {
     emoji: "🤔",
     message: "is thinking about what you said...",
-    label: "think",
+    label: "think about their words",
     category: "neutral",
   },
   reflect: {
     emoji: "🪞",
     message: "is reflecting on your words...",
-    label: "reflect",
+    label: "reflect on their words",
     category: "neutral",
   },
   sit_together: {
