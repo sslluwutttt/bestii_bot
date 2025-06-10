@@ -476,7 +476,7 @@ bot.on("callback_query", async (ctx) => {
   ) {
     const displayName =
       (await db.getDisplayName(ctx.from.id)) ||
-      ctx.from.username ||
+      `@${ctx.from.username}` ||
       ctx.from.first_name;
     const expression = data.split(":")[1];
     const receiverId = userStates[userId].selectedUserId;
@@ -484,14 +484,14 @@ bot.on("callback_query", async (ctx) => {
     const receiver = await db.getUser(receiverId);
     const receiverDisplayName =
       (await db.getDisplayName(receiverId)) ||
-      receiver.username ||
+      `@${receiver.username}` ||
       receiver.first_name;
     await ctx.editMessageText(
-      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to @${receiverDisplayName}!`
+      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to ${receiverDisplayName}!`
     );
     await bot.telegram.sendMessage(
       receiverId,
-      `@${displayName} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
+      `${displayName} ${EXPRESSIONS[expression].message} ${EXPRESSIONS[expression].emoji}`
     );
     delete userStates[userId];
   } else if (
