@@ -224,7 +224,6 @@ async function getAllUsers() {
 }
 
 module.exports = {
-  getAllUsers,
   initDatabase,
   registerUser,
   getUser,
@@ -244,4 +243,5 @@ module.exports = {
   getDisplayName,
   getRecentLogs,
   logUserAction,
+  getAllUsers,
 };
