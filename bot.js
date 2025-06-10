@@ -27,7 +27,7 @@ async function handleBroadcast(ctx) {
         parse_mode: "HTML",
       });
     } catch (error) {
-      console.error(`failed to send message to user ${user.user_id}:`, error);
+      return ctx.reply(`failed to send message to user ${user.user_id}:`, error);;
     }
   }
 
