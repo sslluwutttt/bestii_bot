@@ -9,6 +9,7 @@ const EXPRESSION_CATEGORIES = [
   { key: "animals", label: "🐾 animal vibes" },
   { key: "weather", label: "🌈 weather moods" },
   { key: "other", label: "✨ other" },
+  { key: "reminder", label: "⏲️ reminders" },
 ];
 
 const EXPRESSIONS = {
@@ -895,6 +896,74 @@ const EXPRESSIONS = {
     message: "found treasure with you",
     label: "find treasure",
     category: "other",
+  },
+
+  // reminders
+  water_reminder: {
+    emoji: "💧",
+    message: "reminds you to drink water!",
+    label: "water reminder",
+    category: "reminder",
+  },
+  stretch_reminder: {
+    emoji: "🧘‍♀️",
+    message: "reminds you to stretch!",
+    label: "stretch reminder",
+    category: "reminder",
+  },
+  medicine_reminder: {
+    emoji: "💊",
+    message: "reminds you to take your medicine!",
+    label: "medicine reminder",
+    category: "reminder",
+  },
+  sleep_reminder: {
+    emoji: "😴",
+    message: "reminds you it's bedtime!",
+    label: "bedtime reminder",
+    category: "reminder",
+  },
+  meal_reminder: {
+    emoji: "🍽️",
+    message: "reminds you to eat!",
+    label: "meal reminder",
+    category: "reminder",
+  },
+  break_reminder: {
+    emoji: "⏸️",
+    message: "reminds you to take a break!",
+    label: "break reminder",
+    category: "reminder",
+  },
+  deep_breath: {
+    emoji: "🫁",
+    message: "reminds you to take deep breaths!",
+    label: "breathing reminder",
+    category: "reminder",
+  },
+  pet_feed: {
+    emoji: "🐾",
+    message: "reminds you to feed your pet!",
+    label: "pet feeding",
+    category: "reminder",
+  },
+  pet_pat: {
+    emoji: "🐾",
+    message: "reminds you to pet your pet!",
+    label: "pet patting",
+    category: "reminder",
+  },
+  study_reminder: {
+    emoji: "📖",
+    message: "reminds you to study!",
+    label: "study reminder",
+    category: "reminder",
+  },
+  dental_care: {
+    emoji: "🦷",
+    message: "reminds you to brush teeth!",
+    label: "dental reminder",
+    category: "reminder",
   },
 };
 
