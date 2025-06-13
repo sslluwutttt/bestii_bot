@@ -140,6 +140,12 @@ const EXPRESSIONS = {
     label: "admire",
     category: "positive",
   },
+  gratitude: {
+    emoji: "🙏",
+    message: "is grateful to have you",
+    label: "show gratitude",
+    category: "positive", // moved from "care" to "positive"
+  },
   share_happiness: {
     emoji: "🎈",
     message: "shared their happiness with you!",
@@ -202,6 +208,12 @@ const EXPRESSIONS = {
     label: "comfort",
     category: "care",
   },
+  share_emotions: {
+    emoji: "💬",
+    message: "wants to share their emotions with you.",
+    label: "share emotions",
+    category: "care",
+  },
   offer_tissue: {
     emoji: "🤧",
     message: "offered you a tissue...",
@@ -218,12 +230,6 @@ const EXPRESSIONS = {
     emoji: "🌟",
     message: "is proud of you!",
     label: "be proud",
-    category: "care",
-  },
-  gratitude: {
-    emoji: "🙏",
-    message: "is grateful to have you",
-    label: "show gratitude",
     category: "care",
   },
   strength: {
@@ -306,7 +312,13 @@ const EXPRESSIONS = {
     label: "silly dance",
     category: "playful",
   },
-  pat: { emoji: "🐾", message: "pat you!", label: "pat", category: "care" },
+  hide_under_bed: {
+    emoji: "🛏️",
+    message: "is hiding under the bed!",
+    label: "hide under the bed",
+    category: "playful",
+  },
+  pat: { emoji: "🐾", message: "pat you!", label: "pat", category: "playful" },
   boop: {
     emoji: "👉",
     message: "booped your nose!",
@@ -335,7 +347,7 @@ const EXPRESSIONS = {
     emoji: "🕵️",
     message: "is investigating you!",
     label: "investigate",
-    category: "other",
+    category: "playful",
   },
   bubble: {
     emoji: "🫧",
@@ -385,15 +397,27 @@ const EXPRESSIONS = {
     label: "poke",
     category: "playful",
   },
+  tickle_feather: {
+    emoji: "🪶",
+    message: "tickled you with a feather!",
+    label: "tickle with feather",
+    category: "playful",
+  },
+  bubble_wrap: {
+    emoji: "🫧",
+    message: "popped bubble wrap with you!",
+    label: "pop bubble wrap",
+    category: "playful",
+  },
 
   // Neutral
-  sleep: {
+  ask_attention: {
     emoji: "🥺",
     message: "wants your attention!",
     label: "ask for attention",
     category: "neutral",
   },
-  sleep: {
+  fall_asleep: {
     emoji: "😴",
     message: "fell asleep on you!",
     label: "fall asleep on them",
@@ -521,6 +545,18 @@ const EXPRESSIONS = {
     label: "need tissue",
     category: "sad",
   },
+  rainy_day: {
+    emoji: "🌧️",
+    message: "is feeling gloomy on a rainy day...",
+    label: "rainy day",
+    category: "sad",
+  },
+  lost: {
+    emoji: "🗺️",
+    message: "feels lost and confused...",
+    label: "feel lost",
+    category: "sad",
+  },
   violin: {
     emoji: "🎻",
     message: "plays a sad violin song",
@@ -545,6 +581,60 @@ const EXPRESSIONS = {
     emoji: "💩",
     message: "threw poop at you!",
     label: "throw poop",
+    category: "mean",
+  },
+  shut_up: {
+    emoji: "🤐",
+    message: "asks you to shut up.",
+    label: "ask to shut up",
+    category: "mean",
+  },
+  throw_sand: {
+    emoji: "🏖️",
+    message: "threw sand at you!",
+    label: "throw sand",
+    category: "mean",
+  },
+  mock: {
+    emoji: "😏",
+    message: "mocked you sarcastically!",
+    label: "mock",
+    category: "mean",
+  },
+  mess_hair: {
+    emoji: "💇",
+    message: "messed up your hair!",
+    label: "mess hair",
+    category: "mean",
+  },
+  stick_tongue: {
+    emoji: "😝",
+    message: "stuck their tongue out at you!",
+    label: "stick tongue out",
+    category: "mean",
+  },
+  draw_face: {
+    emoji: "✍️",
+    message: "drew on your face while sleeping!",
+    label: "draw on face while sleeping",
+    category: "mean",
+  },
+  pinch: {
+    emoji: "🤏",
+    message: "pinched you really hard!",
+    label: "pinch",
+    category: "mean",
+  },
+  burp: {
+    emoji: "🫢",
+    message: "burped in your face!",
+    label: "burp in face",
+    category: "mean",
+  },
+  jail: {
+    emoji: "👉🏻",
+    message: "sent you to jail!",
+    label: "send to jail",
     category: "mean",
   },
   fist: {
@@ -577,40 +667,10 @@ const EXPRESSIONS = {
     label: "stomp away",
     category: "mean",
   },
-  block: {
-    emoji: "🚫",
-    message: "blocked you",
-    label: "block",
-    category: "mean",
-  },
-  curse: {
-    emoji: "🤬",
-    message: "cursed at you",
-    label: "curse",
-    category: "mean",
-  },
   door_slam: {
     emoji: "🚪",
     message: "slammed the door",
     label: "slam door",
-    category: "mean",
-  },
-  dagger: {
-    emoji: "🗡️",
-    message: "gave you dagger eyes",
-    label: "dagger eyes",
-    category: "mean",
-  },
-  volcano: {
-    emoji: "🌋",
-    message: "erupted with anger",
-    label: "erupt",
-    category: "mean",
-  },
-  ghost_you: {
-    emoji: "👻",
-    message: "ghosted you completely",
-    label: "ghost",
     category: "mean",
   },
   scissors: {
@@ -691,6 +751,12 @@ const EXPRESSIONS = {
     emoji: "🍮",
     message: "treated you to dessert!",
     label: "dessert treat",
+    category: "food",
+  },
+  chocolate_bar: {
+    emoji: "🍫",
+    message: "shared a chocolate bar with you!",
+    label: "share chocolate",
     category: "food",
   },
 
@@ -859,7 +925,7 @@ const EXPRESSIONS = {
     emoji: "🕊️",
     message: "is ready to forgive you.",
     label: "forgive",
-    category: "care",
+    category: "other",
   },
   time_travel: {
     emoji: "⌛",
@@ -891,10 +957,16 @@ const EXPRESSIONS = {
     label: "fortune telling",
     category: "other",
   },
-  treasure: {
-    emoji: "💎",
-    message: "found treasure with you",
-    label: "find treasure",
+  pirate: {
+    emoji: "🏴‍☠️",
+    message: "sailed the seas like a pirate!",
+    label: "pirate mode",
+    category: "other",
+  },
+  superhero: {
+    emoji: "🦸",
+    message: "saved the day like a superhero!",
+    label: "superhero mode",
     category: "other",
   },
 

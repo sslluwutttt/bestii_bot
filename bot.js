@@ -145,15 +145,11 @@ async function handleMyConnections(ctx) {
     return ctx.reply("😔 <i>no connections yet.</i>", { parse_mode: "HTML" });
   const keyboard = connections.map((c) => [
     {
-      text: `👤 ${c.username} (${c.relationship_type})`,
+      text: `${c.display_name || c.username || c.user_id} (@${c.username})`,
       callback_data: `editrel:${c.user_id}`,
     },
-    {
-      text: `✏️ set name for ${c.username}`,
-      callback_data: `setname:${c.user_id}`,
-    },
   ]);
-  await ctx.reply("👥 <b>Your connections:</b>", {
+  await ctx.reply("👥 <b>your connections:</b>", {
     parse_mode: "HTML",
     reply_markup: { inline_keyboard: keyboard },
   });
@@ -168,12 +164,6 @@ async function handleSetNamePrompt(ctx, targetUserId) {
 }
 
 async function handleEditRelationship(ctx, targetUserId) {
-  const types = ["partner", "friend", "bestie"];
-  const displayName =
-    (await db.getDisplayName(targetUserId)) ||
-    connection.username ||
-    connection.user_id;
-
   const connection = (await db.getConnections(ctx.from.id)).find(
     (c) => c.user_id == targetUserId
   );
@@ -181,23 +171,30 @@ async function handleEditRelationship(ctx, targetUserId) {
     return ctx.editMessageText("❌ <i>connection not found.</i>", {
       parse_mode: "HTML",
     });
-  const keyboard = types
-    .filter((t) => t !== connection.relationship_type)
-    .map((type) => [
+  const displayName =
+    connection.display_name || connection.username || connection.user_id;
+  const username = connection.username || "";
+  const keyboard = [
+    [
       {
-        text: `🔄 change to ${type}`,
-        callback_data: `setrel:${targetUserId}:${type}`,
+        text: "change relationship",
+        callback_data: `changerel:${targetUserId}`,
       },
-    ]);
-  keyboard.push([
-    { text: "⬅️ Back", callback_data: "connections:back" },
-    { text: "❌ Cancel", callback_data: "cancel" },
-  ]);
+    ],
+    [
+      {
+        text: `change name for connection [${displayName} (@${username})]`,
+        callback_data: `setname:${targetUserId}`,
+      },
+    ],
+    [
+      { text: "⬅️ back", callback_data: "connections:back" },
+      { text: "❌ cancel", callback_data: "cancel" },
+    ],
+  ];
 
   await ctx.editMessageText(
-    `@${displayName}\ncurrent: ${connection.relationship_type} ${
-      connection.relationship_type === "bestie" ? "💓" : "🕺🏻"
-    }\nchoose new type:`,
+    `${displayName} (@${username})\nchoose an action:`,
     { reply_markup: { inline_keyboard: keyboard } }
   );
 }
@@ -593,6 +590,33 @@ bot.on("callback_query", async (ctx) => {
     await ctx.editMessageText("❌ <b>Action cancelled.</b>", {
       parse_mode: "HTML",
     });
+    return ctx.answerCbQuery();
+  } else if (data.startsWith("changerel:")) {
+    const targetUserId = data.split(":")[1];
+    const types = ["partner", "friend", "bestie"];
+    const connection = (await db.getConnections(ctx.from.id)).find(
+      (c) => c.user_id == targetUserId
+    );
+    if (!connection)
+      return ctx.editMessageText("❌ <i>connection not found.</i>", {
+        parse_mode: "HTML",
+      });
+    const keyboard = types
+      .filter((t) => t !== connection.relationship_type)
+      .map((type) => [
+        {
+          text: `🔄 change to ${type}`,
+          callback_data: `setrel:${targetUserId}:${type}`,
+        },
+      ]);
+    keyboard.push([
+      { text: "⬅️ back", callback_data: "editrel:" + targetUserId },
+      { text: "❌ cancel", callback_data: "cancel" },
+    ]);
+    await ctx.editMessageText(
+      `current: ${connection.relationship_type}\nchoose new type:`,
+      { reply_markup: { inline_keyboard: keyboard } }
+    );
     return ctx.answerCbQuery();
   }
   ctx.answerCbQuery();
