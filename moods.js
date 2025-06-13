@@ -28,7 +28,7 @@ const MOODS = {
     "😍 in love",
     "🥰 loving",
     "💕 romantic",
-    "💖 affectionate",
+    "🫂 cuddly",
     "😘 adoring",
     "💝 smitten",
     "❤️‍🔥 passionate",
