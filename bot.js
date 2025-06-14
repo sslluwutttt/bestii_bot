@@ -70,7 +70,7 @@ async function handleBackToCategories(ctx) {
   const keyboard = MOOD_CATEGORIES.map((cat) => [
     { text: cat.label, callback_data: `moodcat:${cat.key}` },
   ]);
-  keyboard.push([{ text: "❌ Cancel", callback_data: "cancel" }]);
+  keyboard.push([{ text: "❌ cancel", callback_data: "cancel" }]);
   await ctx.editMessageText("choose your mood category:", {
     reply_markup: { inline_keyboard: keyboard },
   });
@@ -336,8 +336,8 @@ bot.command("connect", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "Yes ✅", callback_data: `accept:${requestId}` },
-            { text: "No ❌", callback_data: `decline:${requestId}` },
+            { text: "yes ✅", callback_data: `accept:${requestId}` },
+            { text: "no ❌", callback_data: `decline:${requestId}` },
           ],
         ],
       },
@@ -469,7 +469,7 @@ bot.on("callback_query", async (ctx) => {
         callback_data: `expcat:${cat.key}`,
       },
     ]);
-    keyboard.push([{ text: "⬅️ Back", callback_data: "back:connections" }]);
+    keyboard.push([{ text: "⬅️ back", callback_data: "back:connections" }]);
     await ctx.editMessageText("choose an expression category:", {
       reply_markup: { inline_keyboard: keyboard },
     });
@@ -493,7 +493,7 @@ bot.on("callback_query", async (ctx) => {
         callback_data: `exp:${e.key}`,
       },
     ]);
-    keyboard.push([{ text: "⬅️ Back", callback_data: "back:expcat" }]);
+    keyboard.push([{ text: "⬅️ back", callback_data: "back:expcat" }]);
     await ctx.editMessageText("choose an expression:", {
       reply_markup: { inline_keyboard: keyboard },
     });
@@ -514,7 +514,7 @@ bot.on("callback_query", async (ctx) => {
       `@${receiver.username}` ||
       receiver.first_name;
     await ctx.editMessageText(
-      `you sent a ${EXPRESSIONS[expression].emoji} ${expression} to ${receiverDisplayName}!`
+      `you sent a ${EXPRESSIONS[expression].emoji} ${expression.replace("_", " ")} to ${receiverDisplayName}!`, {parse_mode: "HTML"}
     );
     await bot.telegram.sendMessage(
       receiverId,
@@ -533,7 +533,7 @@ bot.on("callback_query", async (ctx) => {
         callback_data: `expcat:${cat.key}`,
       },
     ]);
-    keyboard.push([{ text: "⬅️ Back", callback_data: "back:connections" }]);
+    keyboard.push([{ text: "⬅️ back", callback_data: "back:connections" }]);
     await ctx.editMessageText("choose an expression category:", {
       reply_markup: { inline_keyboard: keyboard },
     });
@@ -587,7 +587,7 @@ bot.on("callback_query", async (ctx) => {
     return ctx.answerCbQuery();
   } else if (data === "cancel") {
     delete userStates[userId];
-    await ctx.editMessageText("❌ <b>Action cancelled.</b>", {
+    await ctx.editMessageText("❌ <b>action cancelled.</b>", {
       parse_mode: "HTML",
     });
     return ctx.answerCbQuery();

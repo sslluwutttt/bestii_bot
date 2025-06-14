@@ -144,7 +144,7 @@ const EXPRESSIONS = {
     emoji: "🙏",
     message: "is grateful to have you",
     label: "show gratitude",
-    category: "positive", // moved from "care" to "positive"
+    category: "positive",
   },
   share_happiness: {
     emoji: "🎈",
@@ -216,9 +216,15 @@ const EXPRESSIONS = {
   },
   offer_tissue: {
     emoji: "🤧",
-    message: "offered you a tissue...",
+    message: "offered you a tissue!",
     label: "offer tissue",
-    category: "sad",
+    category: "care",
+  },
+  plant_tree: {
+    emoji: "🌱",
+    message: "planted a friendship tree with you!",
+    label: "plant tree",
+    category: "care",
   },
   healing: {
     emoji: "💝",
@@ -260,7 +266,7 @@ const EXPRESSIONS = {
     emoji: "💪",
     message: "encouraged you to keep going!",
     label: "encourage",
-    category: "positive",
+    category: "care",
   },
   reassure: {
     emoji: "🤗",
@@ -453,6 +459,25 @@ const EXPRESSIONS = {
     label: "ask to wait",
     category: "neutral",
   },
+  knock: {
+    emoji: "🚪",
+    message: "knocked on your door!",
+    label: "knock knock",
+    category: "neutral",
+  },
+  pinky_promise: {
+    emoji: "🤙",
+    message: "made a pinky promise with you!",
+    label: "pinky promise",
+    category: "positive",
+  },
+
+  please: {
+    emoji: "🥺",
+    message: "is asking nicely, please?",
+    label: "ask please",
+    category: "neutral",
+  },
   silence: {
     emoji: "🤫",
     message: "is enjoying the silence...",
@@ -531,6 +556,12 @@ const EXPRESSIONS = {
     emoji: "🥺",
     message: "is feeling lonely",
     label: "feel lonely",
+    category: "sad",
+  },
+  forgive_me: {
+    emoji: "🙏",
+    message: "asks for forgiveness",
+    label: "ask forgiveness",
     category: "sad",
   },
   rain_cloud: {
@@ -765,13 +796,13 @@ const EXPRESSIONS = {
     emoji: "😺",
     message: "sent kitty purrs!",
     label: "kitty purr",
-    category: "other",
+    category: "animals",
   },
   puppy: {
     emoji: "🐶",
     message: "sent puppy kisses!",
     label: "puppy kiss",
-    category: "other",
+    category: "animals",
   },
   wag: {
     emoji: "🐕",
@@ -934,9 +965,27 @@ const EXPRESSIONS = {
     category: "other",
   },
   teleport: {
-    emoji: "⌛",
+    emoji: "🪄",
     message: "teleported to you!",
     label: "teleport",
+    category: "other",
+  },
+  quantum_jump: {
+    emoji: "🌀",
+    message: "did a quantum jump with you into parallel universe!",
+    label: "quantum jump",
+    category: "other",
+  },
+  gravity_flip: {
+    emoji: "🔄",
+    message: "flipped gravity upside down!",
+    label: "flip gravity",
+    category: "other",
+  },
+  time_freeze: {
+    emoji: "🕰️",
+    message: "froze time for a moment next to you!",
+    label: "freeze time",
     category: "other",
   },
   alien_visit: {
@@ -981,6 +1030,12 @@ const EXPRESSIONS = {
     emoji: "🧘‍♀️",
     message: "reminds you to stretch!",
     label: "stretch reminder",
+    category: "reminder",
+  },
+  text_reminder: {
+    emoji: "💬",
+    message: "reminds you to text them!",
+    label: "text me reminder",
     category: "reminder",
   },
   medicine_reminder: {
