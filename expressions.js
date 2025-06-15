@@ -5,6 +5,8 @@ const EXPRESSION_CATEGORIES = [
   { key: "neutral", label: "😐 neutral" },
   { key: "sad", label: "😢 sad & gloomy" },
   { key: "mean", label: "😈 mean & angry" },
+  { key: "morning", label: "🌅 good morning" },
+  { key: "night", label: "🌙 good night" },
   { key: "food", label: "🍽️ food & drinks" },
   { key: "animals", label: "🐾 animal vibes" },
   { key: "weather", label: "🌈 weather moods" },
@@ -84,18 +86,6 @@ const EXPRESSIONS = {
     emoji: "👋",
     message: "waved at you!",
     label: "wave",
-    category: "positive",
-  },
-  sun: {
-    emoji: "🌞",
-    message: "wished you a good morning!",
-    label: "good morning",
-    category: "positive",
-  },
-  moon: {
-    emoji: "🌙",
-    message: "wished you sweet dreams!",
-    label: "sweet dreams",
     category: "positive",
   },
   cheer: {
@@ -341,12 +331,6 @@ const EXPRESSIONS = {
     emoji: "👉",
     message: "booped your nose!",
     label: "boop nose",
-    category: "playful",
-  },
-  loud: {
-    emoji: "🥁",
-    message: "wants you to wake up!",
-    label: "wake up!",
     category: "playful",
   },
   peek: {
@@ -727,6 +711,130 @@ const EXPRESSIONS = {
     message: "talked back rudely",
     label: "talk back",
     category: "mean",
+  },
+
+  // good morning
+  sun: {
+    emoji: "🌞",
+    message: "wished you a good morning!",
+    label: "good morning",
+    category: "morning",
+  },
+  wake_up: {
+    emoji: "🥁",
+    message: "wants you to wake up!",
+    label: "wake up!",
+    category: "morning",
+  },
+  morning_alarm: {
+    emoji: "⏰",
+    message: "rings a gentle wake-up alarm!",
+    label: "wake-up alarm",
+    category: "morning",
+  },
+  morning_bed: {
+    emoji: "🛏️",
+    message: "helps you make the bed!",
+    label: "make bed",
+    category: "morning",
+  },
+  morning_teeth: {
+    emoji: "🦷",
+    message: "is brushing teeth with you!",
+    label: "brush teeth",
+    category: "morning",
+  },
+  breakfast_in_bed: {
+    emoji: "🍳",
+    message: "made you breakfast in bed!",
+    label: "breakfast in bed",
+    category: "morning",
+  },
+  morning_coffee: {
+    emoji: "☕",
+    message: "brought you morning coffee!",
+    label: "morning coffee",
+    category: "morning",
+  },
+  morning_sunshine: {
+    emoji: "🌅",
+    message: "opens the curtains to let sunshine in!",
+    label: "morning sunshine",
+    category: "morning",
+  },
+  morning_bird: {
+    emoji: "🐦",
+    message: "sings like an early bird!",
+    label: "morning bird",
+    category: "morning",
+  },
+  morning_energetic: {
+    emoji: "⚡",
+    message: "shares morning energy with you!",
+    label: "morning energy",
+    category: "morning",
+  },
+  morning_garden: {
+    emoji: "🌺",
+    message: "tends to the morning garden with you!",
+    label: "morning garden",
+    category: "morning",
+  },
+
+  // good night
+  moon: {
+    emoji: "🌙",
+    message: "wished you sweet dreams!",
+    label: "sweet dreams",
+    category: "night",
+  },
+  night_story: {
+    emoji: "📖",
+    message: "reads you a bedtime story!",
+    label: "bedtime story",
+    category: "night",
+  },
+  night_lullaby: {
+    emoji: "🎵",
+    message: "sings you a lullaby!",
+    label: "lullaby",
+    category: "night",
+  },
+  night_blanket: {
+    emoji: "🛏️",
+    message: "tucks you in with a cozy blanket!",
+    label: "tuck in",
+    category: "night",
+  },
+  night_peaceful: {
+    emoji: "✨",
+    message: "wishes you peaceful dreams!",
+    label: "wish peaceful dreams",
+    category: "night",
+  },
+  night_guardian: {
+    emoji: "👼",
+    message: "watches over your sleep!",
+    label: "sleep guardian",
+    category: "night",
+  },
+  night_quiet: {
+    emoji: "🤫",
+    message: "keeps the night peaceful and quiet!",
+    label: "quiet night",
+    category: "night",
+  },
+  night_pillow: {
+    emoji: "🛏️",
+    message: "fluffs your pillow for better sleep!",
+    label: "fluff pillow",
+    category: "night",
+  },
+  night_stars: {
+    emoji: "⭐",
+    message: "admired the stars with you!",
+    label: "stargazing",
+    category: "night",
   },
 
   // Food & Drinks
