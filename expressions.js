@@ -274,6 +274,18 @@ const EXPRESSIONS = {
     label: "reassure",
     category: "care",
   },
+  guide: {
+    emoji: "🧭",
+    message: "guided you through the darkness!",
+    label: "guide",
+    category: "care",
+  },
+  build_fort: {
+    emoji: "⛺",
+    message: "built a cozy fort for you!",
+    label: "build fort",
+    category: "care",
+  },
   check_in: {
     emoji: "📞",
     message: "checked in to see how you're doing!",
@@ -790,6 +802,24 @@ const EXPRESSIONS = {
     label: "share chocolate",
     category: "food",
   },
+  smoothie: {
+    emoji: "🥤",
+    message: "made you a delicious smoothie!",
+    label: "make smoothie",
+    category: "food",
+  },
+  bbq: {
+    emoji: "🍖",
+    message: "invited you to a BBQ!",
+    label: "invite to BBQ",
+    category: "food",
+  },
+  pancakes: {
+    emoji: "🥞",
+    message: "made you fluffy pancakes!",
+    label: "make pancakes",
+    category: "food",
+  },
 
   // Animal Vibes
   kitty: {
@@ -856,6 +886,24 @@ const EXPRESSIONS = {
     emoji: "🦥",
     message: "gave you a slow sloth hug",
     label: "sloth hug",
+    category: "animals",
+  },
+  lion_roar: {
+    emoji: "🦁",
+    message: "roared like a lion!",
+    label: "lion roar",
+    category: "animals",
+  },
+  elephant_trumpet: {
+    emoji: "🐘",
+    message: "trumpeted like an elephant!",
+    label: "elephant trumpet",
+    category: "animals",
+  },
+  fox_sly: {
+    emoji: "🦊",
+    message: "acted sly like a fox!",
+    label: "fox sly",
     category: "animals",
   },
   panda_roll: {
@@ -926,6 +974,24 @@ const EXPRESSIONS = {
     label: "autumn leaves",
     category: "weather",
   },
+  sunshine: {
+    emoji: "☀️",
+    message: "brought you warm sunshine!",
+    label: "bring sunshine",
+    category: "weather",
+  },
+  gentle_rain: {
+    emoji: "🌧️",
+    message: "sent gentle rain to soothe you",
+    label: "gentle rain",
+    category: "weather",
+  },
+  shooting_star: {
+    emoji: "🌠",
+    message: "showed you a shooting star",
+    label: "shooting star",
+    category: "weather",
+  },
   spring_bloom: {
     emoji: "🌸",
     message: "brought spring flowers",
@@ -968,6 +1034,18 @@ const EXPRESSIONS = {
     emoji: "🪄",
     message: "teleported to you!",
     label: "teleport",
+    category: "other",
+  },
+  telepathy: {
+    emoji: "🧠",
+    message: "read your mind!",
+    label: "telepathy",
+    category: "other",
+  },
+  dream_travel: {
+    emoji: "🛌",
+    message: "took you dream traveling",
+    label: "dream travel",
     category: "other",
   },
   quantum_jump: {
