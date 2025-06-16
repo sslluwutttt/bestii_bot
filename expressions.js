@@ -387,6 +387,12 @@ const EXPRESSIONS = {
     label: "magic trick",
     category: "playful",
   },
+  selfie: {
+    emoji: "🤳",
+    message: "took a silly selfie with you!",
+    label: "take selfie",
+    category: "playful",
+  },
   splash: {
     emoji: "💦",
     message: "splashed water at you!",
@@ -465,9 +471,8 @@ const EXPRESSIONS = {
     emoji: "🤙",
     message: "made a pinky promise with you!",
     label: "pinky promise",
-    category: "positive",
+    category: "neutral",
   },
-
   please: {
     emoji: "🥺",
     message: "is asking nicely, please?",
@@ -604,6 +609,12 @@ const EXPRESSIONS = {
     label: "slap",
     category: "mean",
   },
+  disappointed: {
+    emoji: "😒",
+    message: "is disappointed in you.",
+    label: "disappointed",
+    category: "mean",
+  },
   poop: {
     emoji: "💩",
     message: "threw poop at you!",
@@ -668,6 +679,12 @@ const EXPRESSIONS = {
     emoji: "👊",
     message: "raised a fist at you!",
     label: "threaten",
+    category: "mean",
+  },
+  fist: {
+    emoji: "🦵🏻",
+    message: "kicked your ass!",
+    label: "kick ass",
     category: "mean",
   },
   ignore: {
@@ -1134,8 +1151,20 @@ const EXPRESSIONS = {
   },
   time_travel: {
     emoji: "⌛",
-    message: "took you time traveling",
+    message: "took you time traveling!",
     label: "time travel",
+    category: "other",
+  },
+  walk_away: {
+    emoji: "🏃‍♂️",
+    message: "quietly walked away.",
+    label: "walk away",
+    category: "other",
+  },
+  run_away: {
+    emoji: "🏃‍♂️",
+    message: "ran away quickly!",
+    label: "run away",
     category: "other",
   },
   teleport: {
