@@ -89,10 +89,19 @@ const QUESTIONS = [
       { key: "will_listen", label: "i will listen to you more" },
       { key: "will_apologize", label: "i will apologize sincerely" },
       { key: "will_make_amends", label: "i will make amends" },
-      { key: "will_respect_boundaries", label: "i will respect your boundaries" },
-      { key: "will_take_responsibility", label: "i will take responsibility for my actions" },
+      {
+        key: "will_respect_boundaries",
+        label: "i will respect your boundaries",
+      },
+      {
+        key: "will_take_responsibility",
+        label: "i will take responsibility for my actions",
+      },
       { key: "wont_repeat_this", label: "i won't repeat this behavior" },
-      { key: "will_make_up", label: "i will make up for it. tell me what to do" },
+      {
+        key: "will_make_up",
+        label: "i will make up for it. tell me what to do",
+      },
     ],
   },
   {
@@ -134,9 +143,17 @@ async function handleCallback(ctx) {
   const userId = ctx.from.id;
   const state = apologyStates[userId];
   const data = ctx.callbackQuery.data;
-  if (!state) return false;
+  if (!state && !data.startsWith("apology_resp:")) return false;
 
-  if (state.step === "select_connection" && data.startsWith("apology_conn:")) {
+  if (data.startsWith("apology_resp:")) {
+    return await handleResponse(ctx);
+  }
+
+  if (
+    state &&
+    state.step === "select_connection" &&
+    data.startsWith("apology_conn:")
+  ) {
     state.connectionId = data.split(":")[1];
     state.step = 0;
     state.answers = {};
@@ -144,7 +161,7 @@ async function handleCallback(ctx) {
     return true;
   }
 
-  if (typeof state.step === "number") {
+  if (state && typeof state.step === "number") {
     const q = QUESTIONS[state.step];
     if (q.type === "single" && data.startsWith("apology_q:")) {
       state.answers[q.key] = data.split(":")[1];
@@ -200,7 +217,9 @@ async function askQuestion(ctx, userId, idx, edit = false) {
   if (q.key === "yourfeelings") {
     const state = apologyStates[userId];
     const receiver = await db.getUser(state.connectionId);
-    q.text = `💭 what do you think @${receiver.username || receiver.user_id} feels? select all that apply:`;
+    q.text = `💭 what do you think @${
+      receiver.username || receiver.user_id
+    } feels? select all that apply:`;
   }
   apologyStates[userId].step = idx;
   let keyboard = [];
@@ -269,17 +288,37 @@ async function finishApology(ctx, userId) {
   const receiverId = state.connectionId;
   const sender = await db.getUser(userId);
   const receiver = await db.getUser(receiverId);
-  let msg = `🙏 <b>apology form from @${(sender.username || sender.user_id).toLowerCase()}</b>\n\n`;
-  msg += `<b>infraction type:</b> ${(state.answers.infraction_type || "-").toLowerCase()}\n`;
-  msg += `<b>what happened:</b> ${(state.answers.what_happened || "-").toLowerCase()}\n`;
-  msg += `<b>reasons:</b> ${(state.answers.reasons || []).map(x => x.toLowerCase()).join(", ") || "-"}\n`;
-  msg += `<b>my feelings:</b> ${(state.answers.myfeelings || []).map(x => x.toLowerCase()).join(", ") || "-"}\n`;
-  msg += `<b>what you feel:</b> ${(state.answers.yourfeelings || []).map(x => x.toLowerCase()).join(", ") || "-"}\n`;
-  msg += `<b>sincerety:</b> ${(state.answers.sincerety || "-").toLowerCase()}\n`;
-  msg += `<b>promises:</b> ${(state.answers.promises || []).map(x => x.toLowerCase()).join(", ") || "-"}\n`;
+  let msg = `🙏 <b>apology form from @${(
+    sender.username || sender.user_id
+  ).toLowerCase()}</b>\n\n`;
+  msg += `<b>infraction type:</b> ${(
+    state.answers.infraction_type || "-"
+  ).toLowerCase()}\n`;
+  msg += `<b>what happened:</b> ${(
+    state.answers.what_happened || "-"
+  ).toLowerCase()}\n`;
+  msg += `<b>reasons:</b> ${
+    (state.answers.reasons || []).map((x) => x.toLowerCase()).join(", ") || "-"
+  }\n`;
+  msg += `<b>my feelings:</b> ${
+    (state.answers.myfeelings || []).map((x) => x.toLowerCase()).join(", ") ||
+    "-"
+  }\n`;
+  msg += `<b>what you feel:</b> ${
+    (state.answers.yourfeelings || []).map((x) => x.toLowerCase()).join(", ") ||
+    "-"
+  }\n`;
+  msg += `<b>sincerety:</b> ${(
+    state.answers.sincerety || "-"
+  ).toLowerCase()}\n`;
+  msg += `<b>promises:</b> ${
+    (state.answers.promises || []).map((x) => x.toLowerCase()).join(", ") || "-"
+  }\n`;
   msg += `<b>comments:</b> ${(state.answers.comments || "-").toLowerCase()}\n`;
-  msg += `<b>signature:</b> ${(state.answers.signature || "-").toLowerCase()}\n`;
-  msg += '\nwhat will you do?';
+  msg += `<b>signature:</b> ${(
+    state.answers.signature || "-"
+  ).toLowerCase()}\n`;
+  msg += "\nwhat will you do?";
   await ctx.reply("✅ your apology form has been sent!", {
     parse_mode: "HTML",
   });
