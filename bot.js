@@ -2,6 +2,7 @@ const { Telegraf } = require("telegraf");
 const db = require("./db");
 const { MOODS, MOOD_CATEGORIES } = require("./moods");
 const { EXPRESSIONS, EXPRESSION_CATEGORIES } = require("./expressions");
+const apology = require("./apology");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -263,6 +264,19 @@ async function handleHelp(ctx) {
   );
 }
 
+// add apology button to main menu
+const MAIN_MENU_KEYBOARD = [
+  [{ text: "😊 set mood" }, { text: "💌 send interaction" }],
+  [{ text: "🙏 send an apology message" }],
+  [{ text: "🙋‍♂️ my mood" }, { text: "👀 friends' moods" }],
+  [{ text: "🔗 connect" }, { text: "👥 my connections" }],
+  [
+    { text: "⏳ pending requests" },
+    { text: "❌ break the connection" },
+  ],
+  [{ text: "ℹ️ help" }],
+];
+
 bot.command("start", async (ctx) => {
   const userId = ctx.from.id;
   const username = ctx.from.username || `user${userId}`;
@@ -271,16 +285,7 @@ bot.command("start", async (ctx) => {
     "👋 welcome to bestii bot! ❤️\n\nuse menu below for actions or use /help.",
     {
       reply_markup: {
-        keyboard: [
-          [{ text: "😊 set mood" }, { text: "💌 send interaction" }],
-          [{ text: "🙋‍♂️ my mood" }, { text: "👀 friends' moods" }],
-          [{ text: "🔗 connect" }, { text: "👥 my connections" }],
-          [
-            { text: "⏳ pending requests" },
-            { text: "❌ break the connection" },
-          ],
-          [{ text: "ℹ️ help" }],
-        ],
+        keyboard: MAIN_MENU_KEYBOARD,
         resize_keyboard: true,
         one_time_keyboard: false,
       },
@@ -375,9 +380,9 @@ bot.command("decline", async (ctx) => {
 
   await db.declineConnection(requestId);
   await ctx.reply("Request declined.");
-  const requester = await db.getUser(request.requester_id);
+  const requester = await db.getUser(requester.requester_id);
   await bot.telegram.sendMessage(
-    request.requester_id,
+    requester.requester_id,
     `@${ctx.from.username} declined your ${request.relationship_type} request.`
   );
 });
@@ -423,10 +428,11 @@ bot.on("text", async (ctx, next) => {
     delete userStates[ctx.from.id];
     return;
   }
+  if (await apology.handleText(ctx)) return;
   return next();
 });
 
-bot.on("callback_query", async (ctx) => {
+bot.on("callback_query", async (ctx, next) => {
   const userId = ctx.from.id;
   const data = ctx.callbackQuery.data;
 
@@ -456,6 +462,8 @@ bot.on("callback_query", async (ctx) => {
       await ctx.editMessageText("request declined.");
     }
   }
+  // apology callback
+  if (await apology.handleCallback(ctx)) return;
   if (
     userStates[userId]?.step === "select_connection" &&
     data.startsWith("conn:")
@@ -514,7 +522,11 @@ bot.on("callback_query", async (ctx) => {
       `@${receiver.username}` ||
       receiver.first_name;
     await ctx.editMessageText(
-      `you sent a ${EXPRESSIONS[expression].emoji} ${expression.replace("_", " ")} to ${receiverDisplayName}!`, {parse_mode: "HTML"}
+      `you sent a ${EXPRESSIONS[expression].emoji} ${expression.replace(
+        "_",
+        " "
+      )} to ${receiverDisplayName}!`,
+      { parse_mode: "HTML" }
     );
     await bot.telegram.sendMessage(
       receiverId,
