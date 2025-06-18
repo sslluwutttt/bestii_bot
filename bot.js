@@ -270,10 +270,7 @@ const MAIN_MENU_KEYBOARD = [
   [{ text: "🙏 send an apology message" }],
   [{ text: "🙋‍♂️ my mood" }, { text: "👀 friends' moods" }],
   [{ text: "🔗 connect" }, { text: "👥 my connections" }],
-  [
-    { text: "⏳ pending requests" },
-    { text: "❌ break the connection" },
-  ],
+  [{ text: "⏳ pending requests" }, { text: "❌ break the connection" }],
   [{ text: "ℹ️ help" }],
 ];
 
@@ -418,6 +415,8 @@ bot.hears("👀 friends' moods", handleFriendsMoods);
 
 bot.command("send", handleSendInteraction);
 bot.hears("💌 send interaction", handleSendInteraction);
+
+bot.hears("🙏 send an apology message", (ctx) => apology.startApology(ctx));
 
 bot.on("text", async (ctx, next) => {
   const state = userStates[ctx.from.id];
