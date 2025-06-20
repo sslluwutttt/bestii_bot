@@ -106,12 +106,6 @@ const EXPRESSIONS = {
     label: "blush",
     category: "positive",
   },
-  good_luck: {
-    emoji: "🍀",
-    message: "wished you good luck!",
-    label: "wish good luck",
-    category: "positive",
-  },
   trophy: {
     emoji: "🏆",
     message: "thinks you deserve a trophy!",
@@ -196,6 +190,12 @@ const EXPRESSIONS = {
     emoji: "🫂",
     message: "is comforting you with a gentle hug",
     label: "comfort",
+    category: "care",
+  },
+  good_luck: {
+    emoji: "🍀",
+    message: "wished you good luck!",
+    label: "wish good luck",
     category: "care",
   },
   share_emotions: {
@@ -705,12 +705,6 @@ const EXPRESSIONS = {
     label: "rage",
     category: "mean",
   },
-  stomp: {
-    emoji: "🦶",
-    message: "angrily stomped away",
-    label: "stomp away",
-    category: "mean",
-  },
   door_slam: {
     emoji: "🚪",
     message: "slammed the door",
@@ -803,6 +797,12 @@ const EXPRESSIONS = {
     emoji: "🌙",
     message: "wished you sweet dreams!",
     label: "sweet dreams",
+    category: "night",
+  },
+  i_sleep_now: {
+    emoji: "🌃",
+    message: "is sleeping now but you sleep soon!",
+    label: "i sleep now, you sleep soon",
     category: "night",
   },
   night_story: {
@@ -1143,6 +1143,18 @@ const EXPRESSIONS = {
     label: "cast spell",
     category: "other",
   },
+  anticipation: {
+    emoji: "🦶🏻",
+    message: "is stomping his foot in anticipation!",
+    label: "anticipation",
+    category: "other",
+  },
+  hurry: {
+    emoji: "⌛",
+    message: "is telling you to hurry up!",
+    label: "hurry up",
+    category: "other",
+  },
   forgive: {
     emoji: "🕊️",
     message: "is ready to forgive you.",
@@ -1156,7 +1168,7 @@ const EXPRESSIONS = {
     category: "other",
   },
   walk_away: {
-    emoji: "🏃‍♂️",
+    emoji: "🚶🏻‍♂️",
     message: "quietly walked away.",
     label: "walk away",
     category: "other",
