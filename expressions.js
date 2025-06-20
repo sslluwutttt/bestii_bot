@@ -615,6 +615,12 @@ const EXPRESSIONS = {
     label: "disappointed",
     category: "mean",
   },
+  hate: {
+    emoji: "😠",
+    message: "hates you.",
+    label: "hate",
+    category: "mean",
+  },
   poop: {
     emoji: "💩",
     message: "threw poop at you!",
